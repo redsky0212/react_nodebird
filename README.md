@@ -50,7 +50,7 @@ export defalut Home;
 ```
 * next를 이전에 설치를 했기때문에 next를 이용해서 띄움.
   - next는 webpack dev server처럼 사용할 수 있게 해준다.
-  - package.json에 script를 아래와 같이 등록해놓고 next로 띄워주면 동작함.
+  - package.json에 script를 아래와 같이 등록해놓고 next로 띄워주면 동작함(npm run dev).
 ```
 "scripts": {
     "dev": "next",
@@ -64,7 +64,7 @@ export defalut Home;
 * next에서는 폴더 구조대로 파일명을 router로 사용하므로 따로 router코딩을 하지 않는다.
   - 예를 들어 pages&gt;user폴더 및에 create.js파일을 만들면 url 라우터 경로는 루트/user/create가 된다.
   - 추 후 prosaction모드(next start)로 빌드하면 소스 노출이 되지 않기 때문에 보안상에도 문제가 없다. 기본적으로 코드 스플리팅이 적용되어있음.
-    -- code splitting : 번들링된 js파일을 적절히 분리하여 필요한 파일만 불러오는 lazy-load하는 방식.
+    - code splitting : 번들링된 js파일을 적절히 분리하여 필요한 파일만 불러오는 lazy-load하는 방식.
 
 
 
