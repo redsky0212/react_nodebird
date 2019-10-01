@@ -1,8 +1,19 @@
 import React from 'react';
+import Link from 'next/link'; 
+import Head from 'next/head';
+import AppLayout from '../components/AppLayout';
 
 const Home = () => {
     return (
-        <div>Hello Next!</div>
+        <>
+        <Head>
+            <title>노드버드</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.5/antd.min.css" />
+        </Head>
+        <AppLayout>
+            <div>Hello Next!</div>
+        </AppLayout>
+        </>
     );
 }
 

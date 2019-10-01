@@ -66,7 +66,32 @@ export defalut Home;
   - 추 후 prosaction모드(next start)로 빌드하면 소스 노출이 되지 않기 때문에 보안상에도 문제가 없다. 기본적으로 코드 스플리팅이 적용되어있음.
     - code splitting : 번들링된 js파일을 적절히 분리하여 필요한 파일만 불러오는 lazy-load하는 방식.
 
+## ant design 적용하기 (https://ant.design) (npm i antd)
+* 실무에서는 사용할 수도 있고 따로 만들어 사용할 수도 있다.
+* 개발자가 따로 개발자용 사이트나 어드민사이트 같은거 만들때 유용함.
+* ant design으로 커버가 되지않은 부분은 styled component로 대체한다. (npm i styled-components)
+* 각 layout에 따라 소스코드가 있기 때문에 코드를 가져다 쓸 수 있음.
+* 순서
+  - npm i antd 해서 ant design을 사용하기 위한 설치를 진행한다.
+  - 먼저 layout을 만들기 위해서 components폴더를 생성하고 AppLayout.js파일을 생성한다.
+  - 상단 menu를 만들기 위해 ant design사이트에서 menu부분 코드를 가져다 쓴다.(https://ant.design/components/menu/)
+  - index.js파일에서 AppLayout.js콤포넌트를 가져다 쓰면서 children으로 내용을 전달한다.
+  - ant design이 적용 안되어있으므로 css를 head에 불러와 적용해줘야 한다.
+  - next에서는 head에 css를 불러와 쓸때 index.js에서 import Head from 'next/head' 해준다음
+  - jsx에서 head코딩을 한다.(https://nextjs.org/docs#populating-head)
+```
+<Head>
+    <title>노드버드</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.5/antd.min.css" />
+</Head>
+```
+  - 다음으로 AppLayout.js에서 틀어진 css를 더 이쁘게 적용한다. react에서 style을 적용할때는 내용에 객체로 넣는걸 추천.
 
+## 기본 페이지 만들기
+* profile.js, signup.js 파일을 생성하고 
+* Head, AppLayout 을 똑같이 코딩하여 채워 넣는다.
+* AppLayout콤포넌트에서는 Menu.Item에 각 페이지의 Link를 걸어준다.
+* 현재까지 코딩시 Head부분과 AppLayout코딩하는 부분들의 중복 코딩이 발생한다. 이부분은 추 후 개선필요.
 
 ## React backend 설치 과정 정리
 * 

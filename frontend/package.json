@@ -11,6 +11,8 @@
   "author": "redsky",
   "license": "ISC",
   "dependencies": {
+    "antd": "^3.23.5",
+    "core-js": "^3.2.1",
     "next": "^9.0.7",
     "react": "^16.10.1",
     "react-dom": "^16.10.1"
