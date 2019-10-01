@@ -12,7 +12,7 @@
   - 사람마다 코딩 스타일이 다르므로 그것을 정해진 규칙대로 코딩스타일을 맞춰서 하게끔 하기 위함.
 * eslint가 설치 되었으면 eslint설정을 한다.
   - frontend 에 .eslintrc 파일 생성.
-  ```
+```
 {
     "parserOptions": {
         "ecmaVersion": 2019,    // javascript 버전 
@@ -34,7 +34,7 @@
         ]
     }
 }
-  ```
+```
 * eslint에서 plugins에 적어줬던 것들을 설치한다.
   - npm i -D eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks
   - 개발할때만 쓰는거기때문에 devDependencies 에 넣어주는게 좋음.
@@ -51,13 +51,13 @@ export defalut Home;
 * next를 이전에 설치를 했기때문에 next를 이용해서 띄움.
   - next는 webpack dev server처럼 사용할 수 있게 해준다.
   - package.json에 script를 아래와 같이 등록해놓고 next로 띄워주면 동작함.
-  ```
+```
 "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start"
 },
-  ```
+```
 * next에서는 맨 위에 import React from 'react'를 안해도 됨 하지만 결국은 useState등을 사용할 꺼기 때문에 쓸 수밖에 없으나...
 
 ## next 라우팅 시스템
