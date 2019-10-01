@@ -43,7 +43,7 @@
 ```
 const Home = () => {
     return (
-        &lt;div&gt;Hello Next!&lt;/div&gt;
+        <div>Hello Next!</div>
     );
 }
 export defalut Home;
