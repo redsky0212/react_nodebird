@@ -93,5 +93,8 @@ export defalut Home;
 * AppLayout콤포넌트에서는 Menu.Item에 각 페이지의 Link를 걸어준다.
 * 현재까지 코딩시 Head부분과 AppLayout코딩하는 부분들의 중복 코딩이 발생한다. 이부분은 추 후 개선필요.
 
+## 회원가입 폼 만들기
+* 
+
 ## React backend 설치 과정 정리
 * 
