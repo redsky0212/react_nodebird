@@ -63,7 +63,7 @@ var Home = function Home() {
 
 /***/ }),
 
-/***/ 1:
+/***/ 0:
 /*!**************************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=C%3A%5CUsers%5CSKTelecom%5CDocuments%5Cjwh%5Cmyproj%5Creact_proj_study%5Creact_nodebird%5Cfrontend%5Cpages%5Cindex.js ***!
   \**************************************************************************************************************************************************************************************/
@@ -86,5 +86,5 @@ module.exports = dll_6b5a3ee2368b61971f52;
 
 /***/ })
 
-},[[1,"static/runtime/webpack.js"]]]);
+},[[0,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=index.js.map
