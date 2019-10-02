@@ -8,6 +8,7 @@
   - nodemon : node.js 기반의 어플리케이션 개발시 파일 변경이 감지될 때 자동으로 재시작하도록 도와주는 툴.
 * 혹시 git을 연결 했을 경우 .gitignore파일을 만들어 올릴 필요없는 파일들을 제외 시킨다.
   - node_modules폴더는 제외시킴... 
+  - ignore 해야할 목록을 알려주는 사이트 (https://www.gitignore.io/)
 * npm i -D eslint 설치
   - 사람마다 코딩 스타일이 다르므로 그것을 정해진 규칙대로 코딩스타일을 맞춰서 하게끔 하기 위함.
 * eslint가 설치 되었으면 eslint설정을 한다.
@@ -94,7 +95,23 @@ export defalut Home;
 * 현재까지 코딩시 Head부분과 AppLayout코딩하는 부분들의 중복 코딩이 발생한다. 이부분은 추 후 개선필요.
 
 ## 회원가입 폼 만들기
-* 
+* signup.js파일에 코딩 진행 참조.
+  - input 에는 항상 value, onChange를 짝을 지어줘야 한다.
+  - 각 form의 input을 만들고 state와 onchange함수, setState를 코딩한다.
+
+## 회원가입 state와 custom hook
+* console.log는 eslint에서 기본적으로 에러체크를 한다. webpack에서 자동으로 제외 시키게 하던지 아니면 모두 지워주는게 좋음.
+* 폼 검증 로직 추가.
+* 반복적으로 사용되는 hooks는 custom hook으로 만들어서 추가적인 작업을 더 넣어 만들어 줄 수도 있다.(signup.js파일 내부 소스 참조)
+  - 비슷한 처리를 하는 input을 커스텀으로 만들면 state선언과 onchange함수을 한꺼번에 custom hook을 사용해서 쓸 수 있으므로 편리함.
+
+## ----------------------------------------
+## SNS 화면 만들기
+## ----------------------------------------
+
+## app.js로 레이아웃 분리하기
+* 러안ㅁ러
+
 
 ## React backend 설치 과정 정리
 * 
