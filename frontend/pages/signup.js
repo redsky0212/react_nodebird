@@ -1,72 +1,48 @@
-import React, { useState } from 'react';
-import AppLayout from '../components/AppLayout';
-import Head from 'next/head';
+import React, { useState, useCallback } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 
 const Signup = () => {
-    // hooks방식의 state 설정.
-    const [id, setId] = useState('');
-    const [nick, setNick] = useState('');
-    const [password, setPassword] = useState('');
+    // hooks방식의 state 설정.(id, nick, password는 custom hook을 사용)
     const [passwordCheck, setPasswordCheck] = useState('');
     const [term, setTerm] = useState(false);
     const [passwordError, setPasswordError] = useState(false);  // password가 틀린경우 에러체크
     const [termError, setTermError] = useState(false);          // 약관동의 안한경우 에러체크
 
+    // custom hook 만들기 예제(같은 기능을 하는 hook을 합쳐서 custom으로 만들어서 사용)
+    // 여기서는 id, nick, password 가 같으므로 custom hook을 사용한다.
+    const useInput = (initValue = null) => {
+        const [value, setter] = useState(initValue);
+        const handler = (e) => {
+            setter(e.target.value);
+        }
+        return [value, handler];
+    }
+    const [id, onChangeId] = useInput('');
+    const [nick, onChangeNick] = useInput('');
+    const [password, onChangePassword] = useInput('');
 
-    const onSubmit = (e) => {
+    const onSubmit = useCallback((e) => {
         e.preventDefault();
-        console.log({id, nick, password, passwordCheck, term});
-
         if( password !== passwordCheck ){
             return setPasswordError(true);
         }
         if( !term ){
             return setTermError(true);
         }
-    };
+    }, [password, passwordCheck, term]);
 
-    const onChangeId = (e) => {
-        setId(e.target.value);
-    };
-
-    const onChangeNick = (e) => {
-        setNick(e.target.value);
-    };
-
-    const onChangePassword = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const onChangePasswordChk = (e) => {
+    const onChangePasswordChk = useCallback((e) => {
         setPasswordError(e.target.value !== password);
         setPasswordCheck(e.target.value);
-    };
+    }, [password]);
 
-    const onChangeTerm = (e) => {
+    const onChangeTerm = useCallback((e) => {
         setTermError(false);
         setTerm(e.target.checked);
-    };
-
-    // custom hook 만들기 예제(같은 기능을 하는 hook을 합쳐서 custom으로 만들어서 사용)
-    // const useInput = (initValue = null) => {
-    //     const [value, setter] = useState(initValue);
-    //     const handler = (e) => {
-    //         setter(e.target.value);
-    //     }
-    //     return [value, handler];
-    // }
-    // const [id, onChangeId] = useInput('');
-    // const [nick, onChangeNick] = useInput('');
-    // const [password, onChangePassword] = useInput('');
+    }, []);
 
     return (
         <>
-        <Head>
-            <title>노드버드</title>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.5/antd.min.css" />
-        </Head>
-        <AppLayout>
             <Form onSubmit={onSubmit} style={{ padding: 10 }}>
                 <div>
                     <label htmlFor="user-id">아이디</label>
@@ -97,7 +73,6 @@ const Signup = () => {
                     <Button type="primary" htmlType="submit">가입하기</Button>
                 </div>
             </Form>
-        </AppLayout>
         </>
     );
 }

@@ -116,13 +116,21 @@ const [id, onChangeId] = useInput('');
 const [nick, onChangeNick] = useInput('');
 const [password, onChangePassword] = useInput('');
 ```
+* hooks를 사용하는 함수형 컴포넌트에서는 자식 컴포넌트로 넘겨주는 props의 function은 모두 useCallback으로 감싼다.
+  - 이유 : hooks컴포넌트는 리렌더링 될때마다 모두 다시 렌더링 하기 때문에 jsx에 바인딩 된 props들도 모두 새로 생성해서 넘겨주므로 비효율적이다.
+  - 그래서 useCallback을 사용하여 원하는 state가 바뀌었을때만 다시 렌더링 하게 적용한다. 
+  - const onChange = useCallback(첫번째는 함수, 두번째는 바뀔state배열); 빈 배열state는 최초 한번만 함수를 생성한다.
+  - useMemo와 useCallback은 거의 비슷하다. 문자열, 숫자, 객체 같은건 useMemo, 함수는 useCallback을 사용.
 
 ## ----------------------------------------
 ## SNS 화면 만들기
 ## ----------------------------------------
 
-## app.js로 레이아웃 분리하기
-* 러안ㅁ러
+## _app.js로 레이아웃 분리하기
+* head, AppLayout들이 모든 페이지에 들어가 있어서 계속 렌더링 되는 비효율적인 이슈가 있어서 따로 분리가 필요함.
+* next에서는 pages안에 _app.js파일을 만들면 이하 화면들은 자동으로 _app.js를 부모콤포넌트로 사용한다.
+* 우리프로젝트에서는 _app.js안에 **공통으로 쓰는 layout부분**을 넣는다.
+* _app.js는 props로 Component를 받는다(next에서 처리하는것임). 그것을 내용으로 사용한다. &lt;Component/&gt;
 
 
 ## React backend 설치 과정 정리
