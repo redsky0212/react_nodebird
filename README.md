@@ -104,6 +104,18 @@ export defalut Home;
 * 폼 검증 로직 추가.
 * 반복적으로 사용되는 hooks는 custom hook으로 만들어서 추가적인 작업을 더 넣어 만들어 줄 수도 있다.(signup.js파일 내부 소스 참조)
   - 비슷한 처리를 하는 input을 커스텀으로 만들면 state선언과 onchange함수을 한꺼번에 custom hook을 사용해서 쓸 수 있으므로 편리함.
+```
+const useInput = (initValue = null) => {
+    const [value, setter] = useState(initValue);
+    const handler = (e) => {
+        setter(e.target.value);
+    }
+    return [value, handler];
+}
+const [id, onChangeId] = useInput('');
+const [nick, onChangeNick] = useInput('');
+const [password, onChangePassword] = useInput('');
+```
 
 ## ----------------------------------------
 ## SNS 화면 만들기
