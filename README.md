@@ -126,7 +126,14 @@ const [password, onChangePassword] = useInput('');
 ## SNS 화면 만들기
 ## ----------------------------------------
 
-## _app.js로 레이아웃 분리하기
+## next에서 제공하는 파일, 폴더
+* next에서 제공하는 기본파일,폴더들
+  - _document.js : html, head, body를 담당.
+  - _app.js : root
+  - pages : 실제 컴포넌트들.
+  - _error.js : 에러가 발생한다면 호출되는 화면.
+
+## _app.js로 레이아웃 분리하기 (그 외 기본 next에서 제공하는 파일 _document.js, _error.js)
 * head, AppLayout들이 모든 페이지에 들어가 있어서 계속 렌더링 되는 비효율적인 이슈가 있어서 따로 분리가 필요함.
 * next에서는 pages안에 _app.js파일을 만들면 이하 화면들은 자동으로 _app.js를 부모콤포넌트로 사용한다.
 * 우리프로젝트에서는 _app.js안에 **공통으로 쓰는 layout부분**을 넣는다.
@@ -146,6 +153,18 @@ const TextInput = memo(({value, onChange}) => {
 <TextInput value={value} onchange={onChangeId} />
 ```
 
+## prop-types(npm i prop-types 설치) (https://www.npmjs.com/package/prop-types)
+* 부모로부터 자식에게 전해지는 props가 제대로 올바른 자료형으로 전해졌나 파악할 수 있는것.
+* _app.js에 Component를 propTypes를 정해준다. Component : PropTypes.node (node는 jsx에서사용하는 모든 태그들 전체)
+* jsx처럼 받는 부분은 node가 아닌 elementType으로 한다. 위 줄 오류발생.
+
+## antd 그리드 시스템 사용(https://ant.design/components/grid/)
+* Row, Col, Card, Card.Meta 등과 xs, md등의 속성등도 파악 필요.
+* 실제 데이터가 없을경우 dummy데이터를 변수로 만들어서 우선 적용한다.
+* Card actions사용 (로그인 부분)
+
+## 커스텀 훅 재사용하기
+* 
 
 ## React backend 설치 과정 정리
 * 
