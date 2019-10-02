@@ -131,6 +131,20 @@ const [password, onChangePassword] = useInput('');
 * next에서는 pages안에 _app.js파일을 만들면 이하 화면들은 자동으로 _app.js를 부모콤포넌트로 사용한다.
 * 우리프로젝트에서는 _app.js안에 **공통으로 쓰는 layout부분**을 넣는다.
 * _app.js는 props로 Component를 받는다(next에서 처리하는것임). 그것을 내용으로 사용한다. &lt;Component/&gt;
+* 하나의 콤포넌트 안에서도 여러가지 자식 컴포넌트를 모두 따로따로 렌더링이 안되게 처리 하고자 할때는 각각의 컴포넌트에 React의 memo로 씌워준다.
+  - 상황에 따라 다르겠지만 너무 세세한 최적화는 불필요 할 수도 있다.
+```
+// Input 컴포넌트는 antd에서 만든 컴포넌트 이기때문에 수정할 수가 없어서 아래와 같이 코딩한다.
+import {memo} from 'react';
+const TextInput = memo(({value, onChange}) => {
+    return (
+        <Input name="user-id" value={value} required onChange={onChange} />
+    );
+});
+
+// 사용부분
+<TextInput value={value} onchange={onChangeId} />
+```
 
 
 ## React backend 설치 과정 정리
