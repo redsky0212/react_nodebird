@@ -2,6 +2,16 @@ import React, { useState, useCallback } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 import PropTypes from 'prop-types';
 
+// custom hook 만들기 예제(같은 기능을 하는 hook을 합쳐서 custom으로 만들어서 사용)
+// 여기서는 id, nick, password 가 같으므로 custom hook을 사용한다.
+export const useInput = (initValue = null) => {
+    const [value, setter] = useState(initValue);
+    const handler = (e) => {
+        setter(e.target.value);
+    }
+    return [value, handler];
+}
+
 const Signup = () => {
     // hooks방식의 state 설정.(id, nick, password는 custom hook을 사용)
     const [passwordCheck, setPasswordCheck] = useState('');
@@ -9,15 +19,7 @@ const Signup = () => {
     const [passwordError, setPasswordError] = useState(false);  // password가 틀린경우 에러체크
     const [termError, setTermError] = useState(false);          // 약관동의 안한경우 에러체크
 
-    // custom hook 만들기 예제(같은 기능을 하는 hook을 합쳐서 custom으로 만들어서 사용)
-    // 여기서는 id, nick, password 가 같으므로 custom hook을 사용한다.
-    const useInput = (initValue = null) => {
-        const [value, setter] = useState(initValue);
-        const handler = (e) => {
-            setter(e.target.value);
-        }
-        return [value, handler];
-    }
+    
     const [id, onChangeId] = useInput('');
     const [nick, onChangeNick] = useInput('');
     const [password, onChangePassword] = useInput('');

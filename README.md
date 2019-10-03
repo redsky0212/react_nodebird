@@ -164,7 +164,41 @@ const TextInput = memo(({value, onChange}) => {
 * Card actions사용 (로그인 부분)
 
 ## 커스텀 훅 재사용하기
-* 
+* 이전에 만들어 놓은 useInput 커스텀훅을 재사용할 수 있다.
+* AppLayout에 Login폼을 붙이기 위해 LoginForm.js컴포넌트를 만들어 이전에 만든 useInput커스텀훅을 재사용한다.
+```
+import { useInput } from '../pages/signup';
+
+const LoginForm = () => {
+    const [id, onChangeId] = useInput('');
+    const [password, onChangePassword] = useInput('');
+    const onSubmitForm = useCallback((e) => {
+        e.preventDefault();
+        console.log({id, password});
+    });
+
+    return (
+        <Form onSubmit={onSubmitForm}>
+            <div>
+                <label htmlFor="user-id">아이디</label>
+                <br />
+                <Input name="user-id" value={id} onChange={onChangeId} required />
+            </div>
+            <div>
+                <label htmlFor="user-password">비밀번호</label>
+                <br />
+                <Input name="user-password" type="password" value={password} onChange={onChangePassword} required />
+            </div>
+            <div>
+                <Button type="primary" htmlType="submit" loading={false}>로그인</Button>
+                <Link href="/signup"><a><Button>회원가입</Button></a></Link>
+            </div>
+        </Form>
+    );
+}
+
+export default LoginForm;
+```
 
 ## React backend 설치 과정 정리
 * 
