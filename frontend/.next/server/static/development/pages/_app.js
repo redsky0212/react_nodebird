@@ -216,6 +216,7 @@ const AppLayout = ({
     },
     __self: undefined
   }, "\uD68C\uC6D0\uAC00\uC785"))), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Row"], {
+    gutter: 8,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 25
@@ -353,6 +354,9 @@ const LoginForm = () => {
   });
   return __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Form"], {
     onSubmit: onSubmitForm,
+    style: {
+      padding: 10
+    },
     __source: {
       fileName: _jsxFileName,
       lineNumber: 15

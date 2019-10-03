@@ -99,7 +99,7 @@ export defalut Home;
   - input 에는 항상 value, onChange를 짝을 지어줘야 한다.
   - 각 form의 input을 만들고 state와 onchange함수, setState를 코딩한다.
 
-## 회원가입 state와 custom hook
+## 회원가입 state와 custom hook(커스텀훅)
 * console.log는 eslint에서 기본적으로 에러체크를 한다. webpack에서 자동으로 제외 시키게 하던지 아니면 모두 지워주는게 좋음.
 * 폼 검증 로직 추가.
 * 반복적으로 사용되는 hooks는 custom hook으로 만들어서 추가적인 작업을 더 넣어 만들어 줄 수도 있다.(signup.js파일 내부 소스 참조)
@@ -166,6 +166,7 @@ const TextInput = memo(({value, onChange}) => {
 ## 커스텀 훅 재사용하기
 * 이전에 만들어 놓은 useInput 커스텀훅을 재사용할 수 있다.
 * AppLayout에 Login폼을 붙이기 위해 LoginForm.js컴포넌트를 만들어 이전에 만든 useInput커스텀훅을 재사용한다.
+* useInput은 export되어 있어야 한다.
 ```
 import { useInput } from '../pages/signup';
 
@@ -199,6 +200,10 @@ const LoginForm = () => {
 
 export default LoginForm;
 ```
+
+## 메인화면 만들기
+* 노드버드 메뉴의 메인화면을 구성한다.(index.js 참조)
+* antd 를 최대한 활용하여 만든다. index.js파일 소스 참조.
 
 ## React backend 설치 과정 정리
 * 

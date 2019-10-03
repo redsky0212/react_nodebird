@@ -4688,19 +4688,198 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! antd */ "antd");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(antd__WEBPACK_IMPORTED_MODULE_2__);
 var _jsxFileName = "c:\\Users\\redsky\\Work\\myDiskBack\\FAT_Folder\\Dracula\\projact\\2019\\react_nodebird\\frontend\\pages\\index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
+const dummy = {
+  isLoggedIn: true,
+  imagePaths: [],
+  mainPosts: [{
+    User: {
+      id: 1,
+      nickname: 'redsky'
+    },
+    content: '첫 개시글',
+    img: 'https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-0/s180x540/10268581_10152716011096729_8785818270101685508_n.png?_nc_cat=100&_nc_oc=AQl7bI6bkPHjH0INBH2e6HOLhUmpqZ_ciWFvDliwWlT1KGx3g2meKs9ks3rT0PYVY5E&_nc_ht=scontent-icn1-1.xx&oh=56e3b26a95d1ff62e1da7b3e8c1b2354&oe=5E246E60'
+  }]
+};
+
 const Home = () => {
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("div", {
+  return __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 7
+      lineNumber: 21
     },
     __self: undefined
-  }, "Hello Next!"));
+  }, dummy.isLoggedIn && __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Form"], {
+    style: {
+      marginBottom: 20
+    },
+    encType: "multipart/form-data",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 24
+    },
+    __self: undefined
+  }, __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Input"].TextArea, {
+    maxLength: 140,
+    placeholder: "\uC5B4\uB5A4 \uC2E0\uAE30\uD55C \uC77C\uC774 \uC77C\uC5B4\uB0A0\uAE4C\uC694?",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 25
+    },
+    __self: undefined
+  }), __jsx("div", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 26
+    },
+    __self: undefined
+  }, __jsx("input", {
+    type: "file",
+    multiple: true,
+    hidden: true,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 27
+    },
+    __self: undefined
+  }), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 28
+    },
+    __self: undefined
+  }, "\uC774\uBBF8\uC9C0 \uC5C5\uB85C\uB4DC"), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    type: "primary",
+    style: {
+      float: 'right'
+    },
+    htmlType: "submit",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 29
+    },
+    __self: undefined
+  }, "\uC9F9\uC9F9")), __jsx("div", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 31
+    },
+    __self: undefined
+  }, dummy.imagePaths.map((v, i) => {
+    return __jsx("div", {
+      key: v,
+      style: {
+        display: 'inline-block'
+      },
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 35
+      },
+      __self: undefined
+    }, __jsx("img", {
+      src: 'http://localhost:3065/' + v,
+      style: {
+        width: '200px'
+      },
+      alt: v,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 36
+      },
+      __self: undefined
+    }), __jsx("div", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 37
+      },
+      __self: undefined
+    }, __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 38
+      },
+      __self: undefined
+    }, "\uC81C\uAC70")));
+  }))), dummy.mainPosts.map((v, i) => {
+    return __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Card"], {
+      key: +v.createdAt,
+      cover: v.img && __jsx("img", {
+        alt: "example",
+        src: v.img,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 51
+        },
+        __self: undefined
+      }),
+      actions: [__jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
+        type: "retweet",
+        key: "retweet",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 53
+        },
+        __self: undefined
+      }), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
+        type: "heart",
+        key: "heart",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 54
+        },
+        __self: undefined
+      }), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
+        type: "message",
+        key: "message",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 55
+        },
+        __self: undefined
+      }), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
+        type: "ellipsis",
+        key: "ellipsis",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 56
+        },
+        __self: undefined
+      })],
+      extra: __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 58
+        },
+        __self: undefined
+      }, "\uD314\uB85C\uC6B0"),
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 50
+      },
+      __self: undefined
+    }, __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Card"].Meta, {
+      avatar: __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Avatar"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 61
+        },
+        __self: undefined
+      }, v.User.nickname[0]),
+      title: v.User.nickname,
+      description: v.content,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 60
+      },
+      __self: undefined
+    }));
+  }));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
@@ -4716,6 +4895,17 @@ const Home = () => {
 
 module.exports = __webpack_require__(/*! c:\Users\redsky\Work\myDiskBack\FAT_Folder\Dracula\projact\2019\react_nodebird\frontend\pages\index.js */"./pages/index.js");
 
+
+/***/ }),
+
+/***/ "antd":
+/*!***********************!*\
+  !*** external "antd" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("antd");
 
 /***/ }),
 
