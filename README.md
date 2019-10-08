@@ -235,8 +235,10 @@ export default LoginForm;
 * reducers폴더 생성 -> 안에 데이터의 그룹별로 index.js, user.js, post.js파일 생성
 * redux는 하나의 파일을 사용하면 양이 크므로 그룹별로 나눠서 적용하고 최종 하나로 묶어주는 루트 state파일이 있어야 한다.
 * 최초 user.js파일을 예시로 reducer를 만들어 본다.
+  - store객체랑 reducer, action은 여러군데서 사용할 수 있으므로 export해준다.
+* 리듀서 switch에는 default가 반드시 있어야 한다.
 ```
-const initialState = {
+export const initialState = {
     isLoggedIn: false,
     user: {},
 };
@@ -245,13 +247,13 @@ const initialState = {
 const LOG_IN = 'LOG_IN';
 const LOG_OUT = 'LOG_OUT';
 
-const loginAction = {
+export const loginAction = {
     type: LOG_IN,
     data: {
         nickname: 'redsky',
     }
 };
-const logoutAction = {
+export const logoutAction = {
     type: LOG_OUT,
 
 }
@@ -273,8 +275,101 @@ const reducer = (state=initialState, action) => {
                 user:null,
             }
         }
+        default: {
+            return {
+                ...state
+            }
+        }
     }
 }
+
+export default reducer;
+```
+## 불변성과 리듀서 여러개 합치기
+* post.js 리듀서 코딩 만들기
+  - 불변성을 위하여 스프레드 문법을 사용하여 객체를 복사해서 사용한다.
+  - 가독성을 좋게 하기 위하여 immutable 을 사용하기도 한다.
+  - store객체랑 reducer, action은 여러군데서 사용할 수 있으므로 export해준다.
+* 리듀서 switch에는 default가 반드시 있어야 한다.
+```
+export const initialState = {
+    mainPosts: [],
+};
+
+// action
+const ADD_POST = 'ADD_POST';
+const ADD_DUMMY = 'ADD_DUMMY';
+
+export const addPost = {
+    type: ADD_POST,
+};
+export const addDummy = {
+    type: ADD_DUMMY,
+    data: {
+        content: 'Hello',
+        UserId: 1,
+        User: {
+            nickname: 'redsky'
+        }
+    }
+
+}
+
+// reducer
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case ADD_POST: {
+            return {
+                ...state,
+            }
+        }
+        case ADD_DUMMY: {
+            return {
+                ...state,
+                mainPosts: [action.data, ...state.mainPosts],
+            }
+        }
+        default: {
+            return {
+                ...state
+            }
+        }
+    }
+}
+
+export default reducer;
+```
+* 코딩한 user.js, post.js 리듀서를 index.js에서 하나로 합친다.
+  - redux의 combineReducers 를 이용하여 하나로 합친다.
+  - user, post에 연결되어있는 initialState를 루트인 index.js에서 하나로 엮어놓은 구조라고 생각하면 됨.
+```
+import {combineReducers} from 'redux';
+import user from './user';
+import post from './post';
+
+const rootReducer = combineReducers({
+    user,
+    post
+});
+
+export default rootReducer;
+```
+## redux와 react 연결하기
+* 예상해서 만들어 놓은 redux구조를 react화면에 붙이는 과정에서 상황에 따라 수정이 발생할 일이 많다.
+* 그냥 react에서 redux를 붙이는 방식과 next에서 붙이는 방식은 조금 다름. study필요.
+* next에서는 **(npm i next-redux-wrapper)** 설치가 하나 더 필요함.
+* next-redux-wrapper는 props로 받는 store를 실제로는 구현이 안되어 있기 때문에 그 부분을 처리 해주는 것.
+  - withRedux부분 코드는 모든 프로젝트에서 같게 쓰므로 그냥 외우면 됨
+  - 합쳐진 reducer와 state를 합쳐서 store로 만들어 리턴.
+```
+export default withRedux((initialState, options)=>{
+    const store = createStore(reducer, initialState);
+    return store;
+})(NodeBird);
+```
+* 레이아웃역할을 하는 _app.js에 redux를 연결하는 코딩을 한다.
+  - store는 state, action, reducer가 합쳐진 것.
+```
 ```
 
 

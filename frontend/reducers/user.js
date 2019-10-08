@@ -1,4 +1,4 @@
-const initialState = {
+export const initialState = {
     isLoggedIn: false,
     user: {},
 };
@@ -7,13 +7,13 @@ const initialState = {
 const LOG_IN = 'LOG_IN';
 const LOG_OUT = 'LOG_OUT';
 
-const loginAction = {
+export const loginAction = {
     type: LOG_IN,
     data: {
         nickname: 'redsky',
     }
 };
-const logoutAction = {
+export const logoutAction = {
     type: LOG_OUT,
 
 }
@@ -35,5 +35,12 @@ const reducer = (state=initialState, action) => {
                 user:null,
             }
         }
+        default: {
+            return {
+                ...state
+            }
+        }
     }
 }
+
+export default reducer;
