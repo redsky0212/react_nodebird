@@ -404,5 +404,27 @@ export default withRedux((initialState, options)=>{
 })(NodeBird);
 ```
 
+## redux devtools 사용하기
+* redux devtools를 사용하기 위해서는 코드를 연결해줘야 한다.
+  - 미들웨어를 추가한다.
+```
+import {createStore, compose, applyMiddleware} from 'redux';
+
+export default withRedux((initialState, options)=>{
+    // 커스터마이징 코드 추가
+    // options.isServer로 window가 undefined여부를 판단할 수 있음.
+    // 추후 redux의 확장기능을 추가 하기 위해서는 미들웨어를 추가할 수 있다.
+    const middlewares = [];
+    const enhancer = compose(
+        applyMiddleware(...middlewares),
+        options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f)=>f,
+    );
+    const store = createStore(reducer, initialState, enhancer);
+    return store;
+})(NodeBird);
+```
+## react-redux 훅 사용하기
+* 
+
 
 ## React backend 설치 과정 정리

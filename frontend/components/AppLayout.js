@@ -31,7 +31,7 @@ const AppLayout = ({children}) => {
                     {children}
                 </Col>
                 <Col xs={24} md={6}>
-                    <Link href="http://www.glcharts.com"><a target="_blank">Made by redsky</a></Link>
+                    <Link href="/"><a target="_blank">Made by redsky</a></Link>
                 </Col>
             </Row>
         </div>
