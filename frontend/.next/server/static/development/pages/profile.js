@@ -110,6 +110,9 @@ var _jsxFileName = "C:\\Users\\SKTelecom\\Documents\\jwh\\myproj\\react_proj_stu
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
+const dummyUser = {
+  name: 'REDSKY'
+};
 
 const NicknameEditForm = () => {
   return __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Form"], {
@@ -120,21 +123,22 @@ const NicknameEditForm = () => {
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 7
+      lineNumber: 11
     },
     __self: undefined
   }, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    value: dummyUser.name,
     addonBefore: "\uB2C9\uB124\uC784",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 12
     },
     __self: undefined
   }), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Button"], {
     type: "primary",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9
+      lineNumber: 13
     },
     __self: undefined
   }, "\uC218\uC815"));
