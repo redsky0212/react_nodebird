@@ -91,7 +91,7 @@ export defalut Home;
 ## 기본 페이지 만들기
 * profile.js, signup.js 파일을 생성하고 
 * Head, AppLayout 을 똑같이 코딩하여 채워 넣는다.
-* AppLayout콤포넌트에서는 Menu.Item에 각 페이지의 Link를 걸어준다.
+* AppLayout콤포넌트에서는 Menu.Item에 각 페이지의 Link를 걸어준다.(import Link from 'next/link';)
 * 현재까지 코딩시 Head부분과 AppLayout코딩하는 부분들의 중복 코딩이 발생한다. 이부분은 추 후 개선필요.
 
 ## 회원가입 폼 만들기
@@ -204,6 +204,20 @@ export default LoginForm;
 ## 메인화면 만들기
 * 노드버드 메뉴의 메인화면을 구성한다.(index.js 참조)
 * antd 를 최대한 활용하여 만든다. index.js파일 소스 참조.
+* 추 후 조건문, 반복문 기준으로 컴포넌트를 분리하는게 좋음.
+
+## 프로필 화면 만들기
+* antd를 이용하여 닉네임form, 팔로잉목록List, 팔로워목록List 를 추가.
+* profile.js파일 참조
+
+## 컴포넌트 분리하기
+* 보통은 조건문, 반복문, Form 들을 기준으로 분리를 한다.
+* index.js에서 (PostCard.js, PostForm.js)를 분리.
+* profile.js에서 (NicknameEditForm.js)를 분리.
+* AppLayout.js에서는 (UserProfile.js, LoginForm.js) 분리.
+* props를 받는 컴포넌트는 prop-types 를 지정해 준다.
+  - 객체는 PropsTypes.object로 해도 되지만 좀 더 자세한 설정을 하기 위해서는 PropsTypes.shape()를 사용한다.(https://www.npmjs.com/package/prop-types)
+
 
 ## React backend 설치 과정 정리
 * 
