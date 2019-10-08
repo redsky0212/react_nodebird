@@ -218,6 +218,64 @@ export default LoginForm;
 * props를 받는 컴포넌트는 prop-types 를 지정해 준다.
   - 객체는 PropsTypes.object로 해도 되지만 좀 더 자세한 설정을 하기 위해서는 PropsTypes.shape()를 사용한다.(https://www.npmjs.com/package/prop-types)
 
+## ----------------------------------------
+## 리덕스 익히기
+## ----------------------------------------
+
+## redux 주요 개념 소개
+* 흩어져 있는 dummy데이터들을 redux로 관리하게 된다.
+* 보통 복잡한 state는 redux를 쓰고 간단한 state는 react에서 바로 쓴다.
+* action -> state를 바꾸는 행동.(react의 setState와 비슷))
+  - dispatch -> action을 실행.
+* reducer -> action의 결과로 state를 어떻게 바꿀지 로직을 정리.
+* redux는 react와는 별개로 어디서든 쓸 수 있는 구조이다.
+
+## 첫 리듀서 만들기
+* 설치 (npm i redux react-redux) 리덕스는 리엑트와 별개이기 때문에 react-redux가 react와 연결시켜주는 기능을 함.
+* reducers폴더 생성 -> 안에 데이터의 그룹별로 index.js, user.js, post.js파일 생성
+* redux는 하나의 파일을 사용하면 양이 크므로 그룹별로 나눠서 적용하고 최종 하나로 묶어주는 루트 state파일이 있어야 한다.
+* 최초 user.js파일을 예시로 reducer를 만들어 본다.
+```
+const initialState = {
+    isLoggedIn: false,
+    user: {},
+};
+
+// action
+const LOG_IN = 'LOG_IN';
+const LOG_OUT = 'LOG_OUT';
+
+const loginAction = {
+    type: LOG_IN,
+    data: {
+        nickname: 'redsky',
+    }
+};
+const logoutAction = {
+    type: LOG_OUT,
+
+}
+
+// reducer
+const reducer = (state=initialState, action) => {
+    switch( action.type ){
+        case LOG_IN: {
+            return {
+                ...state,
+                isLoggedIn: true,
+                user: action.data,
+            }
+        }
+        case LOG_OUT: {
+            return {
+                ...state,
+                isLoggedIn: false,
+                user:null,
+            }
+        }
+    }
+}
+```
+
 
 ## React backend 설치 과정 정리
-* 
