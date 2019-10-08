@@ -244,8 +244,8 @@ export const initialState = {
 };
 
 // action
-const LOG_IN = 'LOG_IN';
-const LOG_OUT = 'LOG_OUT';
+export const LOG_IN = 'LOG_IN';
+export const LOG_OUT = 'LOG_OUT';
 
 export const loginAction = {
     type: LOG_IN,
@@ -297,8 +297,8 @@ export const initialState = {
 };
 
 // action
-const ADD_POST = 'ADD_POST';
-const ADD_DUMMY = 'ADD_DUMMY';
+export const ADD_POST = 'ADD_POST';
+export const ADD_DUMMY = 'ADD_DUMMY';
 
 export const addPost = {
     type: ADD_POST,
@@ -417,14 +417,36 @@ export default withRedux((initialState, options)=>{
     const middlewares = [];
     const enhancer = compose(
         applyMiddleware(...middlewares),
-        options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f)=>f,
+        !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f)=>f,
     );
     const store = createStore(reducer, initialState, enhancer);
     return store;
 })(NodeBird);
 ```
-## react-redux 훅 사용하기
-* 
+## react-redux 훅 사용하기. 공식문서(https://react-redux.js.org/next/api/hooks)
+* pages/index.js참조
+* react-redux 7.1.1부터 사용가능.
+* class형 컴포넌트는 connect를 사용하고 함수형훅스 컴포넌트는 redux 훅을 사용한다.
+* useEffect의 두번째 배열인자가 없을때는 componentDidMount와 같으므로 이 부분에서 리듀서의 action을 dispatch해본다.
+```
+import {useDispatch} from 'react-redux';
+import { LOG_IN, loginAction } from '../reducers/user';
+
+// redux의 hook(useDispatch)을 이용하여 사용.
+const dispatch = useDispatch();
+useEffect(() => {
+    dispatch({
+        type: LOG_IN,
+        data: {
+            nickname: 'redsky'
+        }
+    });
+    // action처리 함수를 불러와서 action함수로 처리해도 된다.
+    dispatch(loginAction);
+}, []);
+```
+* 리덕스의 state를 가져다 쓰는 방법(useSelector)
+  - const {isLoggedIn, user} = **useSelector**(state=>state.user);
 
 
 ## React backend 설치 과정 정리

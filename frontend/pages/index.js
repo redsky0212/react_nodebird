@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link'; 
 import { Form, Input, Button, Card, Icon, Avatar } from 'antd';
+import {useDispatch, useSelector} from 'react-redux';
+import { loginAction, logoutAction } from '../reducers/user';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 
@@ -19,8 +21,18 @@ const dummy = {
 };
 
 const Home = () => {
+
+    // redux의 hook(useDispatch)을 이용하여 사용.
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(loginAction);
+    }, []);
+    // redux의 state를 가져와 쓰는 방법
+    const {isLoggedIn, user} = useSelector(state=>state.user);
+
     return (
         <div>
+            {isLoggedIn ? <div>로그인 했습니다: {user.nickname}</div>:<div>로그아웃 했습니다.</div>}
             { dummy.isLoggedIn && <PostForm /> }
             {
                 dummy.mainPosts.map((v, i) => {
