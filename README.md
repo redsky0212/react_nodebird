@@ -233,9 +233,9 @@ export default LoginForm;
 ## 첫 리듀서 만들기
 * 설치 (npm i redux react-redux) 리덕스는 리엑트와 별개이기 때문에 react-redux가 react와 연결시켜주는 기능을 함.
 * reducers폴더 생성 -> 안에 데이터의 그룹별로 index.js, user.js, post.js파일 생성
-* redux는 하나의 파일을 사용하면 양이 크므로 그룹별로 나눠서 적용하고 최종 하나로 묶어주는 루트 state파일이 있어야 한다.
+* redux는 하나의 파일을 사용하면 양이 크므로 그룹별로 나눠서 적용하고 최종 하나로 묶어주는 루트 state파일이 있어야 한다.(combineReducers)
 * 최초 user.js파일을 예시로 reducer를 만들어 본다.
-  - store객체랑 reducer, action은 여러군데서 사용할 수 있으므로 export해준다.
+  - store(initialState)객체랑 reducer, action은 여러군데서 사용할 수 있으므로 export해준다.
 * 리듀서 switch에는 default가 반드시 있어야 한다.
 ```
 export const initialState = {
@@ -287,7 +287,7 @@ export default reducer;
 ```
 ## 불변성과 리듀서 여러개 합치기
 * post.js 리듀서 코딩 만들기
-  - 불변성을 위하여 스프레드 문법을 사용하여 객체를 복사해서 사용한다.
+  - 불변성을 위하여 스프레드 문법을 사용하여 객체를 복사해서 사용한다.(또는 immutable을 사용한다.)
   - 가독성을 좋게 하기 위하여 immutable 을 사용하기도 한다.
   - store객체랑 reducer, action은 여러군데서 사용할 수 있으므로 export해준다.
 * 리듀서 switch에는 default가 반드시 있어야 한다.
@@ -405,6 +405,7 @@ export default withRedux((initialState, options)=>{
 ```
 
 ## redux devtools 사용하기
+* react-redux의 Provider를 이용하여 연결시 store값을 전달 해야하는데 store값 가져오는 부분과 devtools를 연결하는 부분을 설명.
 * redux devtools를 사용하기 위해서는 코드를 연결해줘야 한다.
   - 미들웨어를 추가한다.
 ```
@@ -426,7 +427,7 @@ export default withRedux((initialState, options)=>{
 ## react-redux 훅 사용하기. 공식문서(https://react-redux.js.org/next/api/hooks)
 * pages/index.js참조
 * react-redux 7.1.1부터 사용가능.
-* class형 컴포넌트는 connect를 사용하고 함수형훅스 컴포넌트는 redux 훅을 사용한다.
+* class형 컴포넌트는 connect를 사용하고 함수형훅스 컴포넌트는 redux 훅을 사용한다.(useDispatch, useSelector)
 * useEffect의 두번째 배열인자가 없을때는 componentDidMount와 같으므로 이 부분에서 리듀서의 action을 dispatch해본다.
 ```
 import {useDispatch} from 'react-redux';
@@ -447,6 +448,28 @@ useEffect(() => {
 ```
 * 리덕스의 state를 가져다 쓰는 방법(useSelector)
   - const {isLoggedIn, user} = **useSelector**(state=>state.user);
+
+## react-redux connect
+* 위에서 사용한 redux의 hooks를 사용하기 전에는 connect hoc를 이용하여 사용하였다.
+  - 기존방식 코딩
+```
+// store안의 state 값을 props로 연결한다.
+const mapStateToProps = (state) => {
+    return {
+        trendChartData: state.sales.get('trendChartData')
+    };
+};
+/* 액션 생성자를 사용하여 액션을 생성하고,
+    해당 액션을 dispatch 하는 함수를 만들은 후, 이를 props 로 연결해줍니다.
+*/
+const mapDispatchToProps = (dispatch) => ({
+    onSetTrendChart: (params) => dispatch(setTrendChart(params))
+});
+TrendChartContainer = connect(mapStateToProps, mapDispatchToProps)(TrendChartContainer);
+
+
+export default TrendChartContainer;
+```
 
 
 ## React backend 설치 과정 정리
