@@ -451,7 +451,7 @@ useEffect(() => {
 
 ## react-redux connect
 * 위에서 사용한 redux의 hooks를 사용하기 전에는 connect hoc를 이용하여 사용하였다.
-  - 기존방식 코딩
+  - 기존방식 코딩 방법
 ```
 // store안의 state 값을 props로 연결한다.
 const mapStateToProps = (state) => {
@@ -470,6 +470,76 @@ TrendChartContainer = connect(mapStateToProps, mapDispatchToProps)(TrendChartCon
 
 export default TrendChartContainer;
 ```
+## dummy 데이터를 리덕스로 옮겨 사용하기.
+* 기존 dummy데이터로 화면에 만들어 놨던 임시 데이터를 redux의 state로 옮기고 그것을 useSelector로 가져와 화면에 바인딩 한다.
+* useSelector로 가져와 사용할 때 최대한 잘게 쪼개서 가져와 바인딩하면 rendering을 줄일 수 있어서 좋다.
+```
+// redux의 state를 가져와 쓰는 방법
+const { isLoggedIn, user } = useSelector(state => state.user);
+const { mainPosts } = useSelector(state => state.post);
+
+// redux의 hook(useDispatch)을 이용하여 사용.
+const dispatch = useDispatch();
+useEffect(() => {
+    dispatch(loginAction);
+}, []);
+
+
+return (
+    <div>
+        {isLoggedIn ? <div>로그인 했습니다: {user.nickname}</div>:<div>로그아웃 했습니다.</div>}
+        { isLoggedIn && <PostForm /> }
+        {
+            mainPosts.map((v, i) => {
+                return (
+                    <PostCard key={+v.createdAt} v={v} />
+                );
+            })
+        }
+        
+    </div>
+);
+```
+* dummyData를 모두 redux로 옮기고 일단 로그인 처리 됬을때는 dummy User값을 셋팅하게 적용해 놓는다.
+* 기존에 index.js파일에 loginAction을 처리했던 부분을 삭제하고 로그인 버튼을 클릭했을때 처리 되게 소스를 옮긴다.(LoginForm.js)
+```
+const onSubmitForm = useCallback((e) => {
+    e.preventDefault();
+    console.log({id, password});
+    dispatch(loginAction);
+}, [id, password]);
+```
+* 같은 방법으로 로그아웃버튼을 만들어 구현해본다.(UserProfile.js에 버튼추가 후 logoutAction호출)
+
+## 리액트 state와 리덕스 stete
+* 회원가입 폼에서 state처리 작업중 동적인 데이터 처리 할때는 함수로 처리.(user.js참조)
+```
+// 동적인 데이터 처리는 함수로 argument를 받아서 셋팅한다.
+export const signupAction = (data) => {
+    return {
+        type: SIGN_UP,
+        data: data
+    }
+}
+```
+* 각각의 요소(id, password, nick) 등으 값들을 모두 리덕스state로 대체하면 이벤트가 일어날 때 마다 action이 호출 되기도 하고 코딩 양도 많아진다.
+* 상황에 따라 객체로 묶어서 하나로 action처리 하는게 좋음.
+  - (signup.js)
+```
+dispatch(signupAction({
+    id,
+    password,
+    nick
+}));
+```
+
+## ----------------------------------------
+## 리덕스 사가 배우기
+## ----------------------------------------
+
+## 리덕스 사가의 필요성과 맛보기
+* 
+
 
 
 ## React backend 설치 과정 정리

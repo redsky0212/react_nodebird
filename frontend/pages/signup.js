@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 import PropTypes from 'prop-types';
+import { signupAction } from '../reducers/user';
+import {useDispatch} from 'react-redux';
 
 // custom hook 만들기 예제(같은 기능을 하는 hook을 합쳐서 custom으로 만들어서 사용)
 // 여기서는 id, nick, password 가 같으므로 custom hook을 사용한다.
@@ -13,6 +15,9 @@ export const useInput = (initValue = null) => {
 }
 
 const Signup = () => {
+
+    const dispatch = useDispatch();
+
     // hooks방식의 state 설정.(id, nick, password는 custom hook을 사용)
     const [passwordCheck, setPasswordCheck] = useState('');
     const [term, setTerm] = useState(false);
@@ -32,6 +37,13 @@ const Signup = () => {
         if( !term ){
             return setTermError(true);
         }
+
+        dispatch(signupAction({
+            id,
+            password,
+            nick
+        }));
+
     }, [password, passwordCheck, term]);
 
     const onChangePasswordChk = useCallback((e) => {

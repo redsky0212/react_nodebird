@@ -215,24 +215,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! antd */ "antd");
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(antd__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
 var _jsxFileName = "C:\\Users\\SKTelecom\\Documents\\jwh\\myproj\\react_proj_study\\react_nodebird\\frontend\\components\\PostForm.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
-const dummy = {
-  isLoggedIn: true,
-  imagePaths: [],
-  mainPosts: [{
-    User: {
-      id: 1,
-      nickname: 'redsky'
-    },
-    content: '첫 개시글',
-    img: 'https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-0/s180x540/10268581_10152716011096729_8785818270101685508_n.png?_nc_cat=100&_nc_oc=AQl7bI6bkPHjH0INBH2e6HOLhUmpqZ_ciWFvDliwWlT1KGx3g2meKs9ks3rT0PYVY5E&_nc_ht=scontent-icn1-1.xx&oh=56e3b26a95d1ff62e1da7b3e8c1b2354&oe=5E246E60'
-  }]
-};
+
 
 const PostForm = () => {
+  const {
+    imagePaths
+  } = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useSelector"])(state => state.post);
   return __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Form"], {
     style: {
       margin: '10px 0 20px'
@@ -240,7 +234,7 @@ const PostForm = () => {
     encType: "multipart/form-data",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21
+      lineNumber: 9
     },
     __self: undefined
   }, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Input"].TextArea, {
@@ -248,13 +242,13 @@ const PostForm = () => {
     placeholder: "\uC5B4\uB5A4 \uC2E0\uAE30\uD55C \uC77C\uC774 \uC77C\uC5B4\uB0A0\uAE4C\uC694?",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22
+      lineNumber: 10
     },
     __self: undefined
   }), __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 23
+      lineNumber: 11
     },
     __self: undefined
   }, __jsx("input", {
@@ -263,13 +257,13 @@ const PostForm = () => {
     hidden: true,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 12
     },
     __self: undefined
   }), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Button"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25
+      lineNumber: 13
     },
     __self: undefined
   }, "\uC774\uBBF8\uC9C0 \uC5C5\uB85C\uB4DC"), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Button"], {
@@ -280,16 +274,16 @@ const PostForm = () => {
     htmlType: "submit",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 26
+      lineNumber: 14
     },
     __self: undefined
   }, "\uC9F9\uC9F9")), __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 28
+      lineNumber: 16
     },
     __self: undefined
-  }, dummy.imagePaths.map((v, i) => {
+  }, imagePaths.map((v, i) => {
     return __jsx("div", {
       key: v,
       style: {
@@ -297,7 +291,7 @@ const PostForm = () => {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 32
+        lineNumber: 20
       },
       __self: undefined
     }, __jsx("img", {
@@ -308,19 +302,19 @@ const PostForm = () => {
       alt: v,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 33
+        lineNumber: 21
       },
       __self: undefined
     }), __jsx("div", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 34
+        lineNumber: 22
       },
       __self: undefined
     }, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Button"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 35
+        lineNumber: 23
       },
       __self: undefined
     }, "\uC81C\uAC70")));
@@ -5403,61 +5397,52 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
-const dummy = {
-  isLoggedIn: true,
-  imagePaths: [],
-  mainPosts: [{
-    User: {
-      id: 1,
-      nickname: 'redsky'
-    },
-    content: '첫 개시글',
-    img: 'https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-0/s180x540/10268581_10152716011096729_8785818270101685508_n.png?_nc_cat=100&_nc_oc=AQl7bI6bkPHjH0INBH2e6HOLhUmpqZ_ciWFvDliwWlT1KGx3g2meKs9ks3rT0PYVY5E&_nc_ht=scontent-icn1-1.xx&oh=56e3b26a95d1ff62e1da7b3e8c1b2354&oe=5E246E60'
-  }]
-};
 
 const Home = () => {
-  // redux의 hook(useDispatch)을 이용하여 사용.
-  const dispatch = Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["useDispatch"])();
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-    dispatch(_reducers_user__WEBPACK_IMPORTED_MODULE_4__["loginAction"]);
-  }, []); // redux의 state를 가져와 쓰는 방법
-
+  // redux의 state를 가져와 쓰는 방법
   const {
     isLoggedIn,
     user
   } = Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["useSelector"])(state => state.user);
+  const {
+    mainPosts
+  } = Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["useSelector"])(state => state.post); // redux의 hook(useDispatch)을 이용하여 사용.
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //     dispatch(loginAction);
+  // }, []);
+
   return __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34
+      lineNumber: 22
     },
     __self: undefined
   }, isLoggedIn ? __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35
+      lineNumber: 23
     },
     __self: undefined
   }, "\uB85C\uADF8\uC778 \uD588\uC2B5\uB2C8\uB2E4: ", user.nickname) : __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35
+      lineNumber: 23
     },
     __self: undefined
-  }, "\uB85C\uADF8\uC544\uC6C3 \uD588\uC2B5\uB2C8\uB2E4."), dummy.isLoggedIn && __jsx(_components_PostForm__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }, "\uB85C\uADF8\uC544\uC6C3 \uD588\uC2B5\uB2C8\uB2E4."), isLoggedIn && __jsx(_components_PostForm__WEBPACK_IMPORTED_MODULE_5__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36
+      lineNumber: 24
     },
     __self: undefined
-  }), dummy.mainPosts.map((v, i) => {
+  }), mainPosts.map((v, i) => {
     return __jsx(_components_PostCard__WEBPACK_IMPORTED_MODULE_6__["default"], {
       key: +v.createdAt,
       v: v,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 40
+        lineNumber: 28
       },
       __self: undefined
     });
@@ -5472,7 +5457,7 @@ const Home = () => {
 /*!**************************!*\
   !*** ./reducers/user.js ***!
   \**************************/
-/*! exports provided: initialState, LOG_IN, LOG_OUT, loginAction, logoutAction, default */
+/*! exports provided: initialState, LOG_IN, LOG_OUT, SIGN_UP, loginAction, logoutAction, signupAction, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5480,17 +5465,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialState", function() { return initialState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOG_IN", function() { return LOG_IN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOG_OUT", function() { return LOG_OUT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SIGN_UP", function() { return SIGN_UP; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginAction", function() { return loginAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logoutAction", function() { return logoutAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "signupAction", function() { return signupAction; });
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_objectSpread__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/objectSpread */ "./node_modules/@babel/runtime-corejs2/helpers/esm/objectSpread.js");
 
+const dummyUser = {
+  nickname: 'redsky',
+  Post: [],
+  Followings: [],
+  Followers: []
+};
 const initialState = {
   isLoggedIn: false,
-  user: {}
+  user: null,
+  signUpData: {}
 }; // action
 
 const LOG_IN = 'LOG_IN';
 const LOG_OUT = 'LOG_OUT';
+const SIGN_UP = 'SIGN_UP';
 const loginAction = {
   type: LOG_IN,
   data: {
@@ -5499,6 +5494,13 @@ const loginAction = {
 };
 const logoutAction = {
   type: LOG_OUT
+}; // 동적인 데이터 처리는 함수로 argument를 받아서 셋팅한다.
+
+const signupAction = data => {
+  return {
+    type: SIGN_UP,
+    data: data
+  };
 }; // reducer
 
 const reducer = (state = initialState, action) => {
@@ -5507,7 +5509,7 @@ const reducer = (state = initialState, action) => {
       {
         return Object(_babel_runtime_corejs2_helpers_esm_objectSpread__WEBPACK_IMPORTED_MODULE_0__["default"])({}, state, {
           isLoggedIn: true,
-          user: action.data
+          user: dummyUser
         });
       }
 
@@ -5516,6 +5518,13 @@ const reducer = (state = initialState, action) => {
         return Object(_babel_runtime_corejs2_helpers_esm_objectSpread__WEBPACK_IMPORTED_MODULE_0__["default"])({}, state, {
           isLoggedIn: false,
           user: null
+        });
+      }
+
+    case SIGN_UP:
+      {
+        return Object(_babel_runtime_corejs2_helpers_esm_objectSpread__WEBPACK_IMPORTED_MODULE_0__["default"])({}, state, {
+          signUpData: action.data
         });
       }
 

@@ -1,11 +1,20 @@
+const dummyUser = {
+    nickname: 'redsky',
+    Post: [],
+    Followings: [],
+    Followers: [],
+};
+
 export const initialState = {
     isLoggedIn: false,
-    user: {},
+    user: null,
+    signUpData: {},
 };
 
 // action
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
+export const SIGN_UP = 'SIGN_UP';
 
 export const loginAction = {
     type: LOG_IN,
@@ -17,6 +26,13 @@ export const logoutAction = {
     type: LOG_OUT,
 
 }
+// 동적인 데이터 처리는 함수로 argument를 받아서 셋팅한다.
+export const signupAction = (data) => {
+    return {
+        type: SIGN_UP,
+        data: data
+    }
+}
 
 // reducer
 const reducer = (state=initialState, action) => {
@@ -25,7 +41,7 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: true,
-                user: action.data,
+                user: dummyUser,
             }
         }
         case LOG_OUT: {
@@ -33,6 +49,12 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 isLoggedIn: false,
                 user:null,
+            }
+        }
+        case SIGN_UP: {
+            return {
+                ...state,
+                signUpData: action.data
             }
         }
         default: {
