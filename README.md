@@ -538,7 +538,81 @@ dispatch(signupAction({
 ## ----------------------------------------
 
 ## 리덕스 사가의 필요성과 맛보기
-* 
+* 리덕스는 항상 동기 처리만 가능하므로 비동기 처리를 위해서는 리덕스사가의 추가 기능 사용한다. react미들웨어 추가.
+  - (npm i redux-saga)
+  - function* generator(){} 문법을 사용할거임.(무한의 개념과 비동기처리시 많이 사용함)
+  - generator가 어렵다면 사가의 패턴을 이용하여 패턴대로만 진행 할 수도 있음.
+* sagas폴더 생성후 reducers와 같이 index.js, post.js, user.js파일을 생성한다.
+* index.js(reducer와 같이 합쳐주는 index.js파일이 있어야 한다.)
+```
+import {all, call} from 'redux-saga/effects';
+import user from './user';
+import post from './post';
+
+export default function* rootSage(){
+    yield all([
+        call(user),
+        call(post),
+    ]);
+}
+```
+* 리덕스사가를 이용한 login 코딩 (user.js)
+  - 리덕스의 LOG_IN 액션을 이용하여 사가가 대기하고있다가 비동기로 실행 하게끔 처리.
+  - redux-saga의 all, call등은 study필요.
+```
+import { all, fork, takeLatest, call, put} from 'redux-saga/effects';
+import { LOG_IN, LOG_IN_SUCCESS, LOG_IN_FAILURE } from '../reducers/user';
+
+function loginAPI(){
+    // 서버요청 부분
+}
+
+function* login(){
+    try{
+        yield call(loginAPI);
+        yield put({     // put 은 dispatch와 같은 기능
+            type:LOG_IN_SUCCESS
+        });
+    }catch(e){
+        console.error(e);
+        yield put({
+            type: LOG_IN_FAILURE
+        });
+    }
+}
+
+function* watchLogin(){
+    yield takeLatest(LOG_IN, login);
+}
+
+export default function* userSaga(){
+    yield all([
+        fork(watchLogin),
+    ]);
+}
+```
+
+## 사가 미들웨어 리덕스에 연결하기
+* sagas폴더에 middleware.js파일을 생성한다.(middleware파일을 따로 만들어서 하면 에러가 남. )
+  - 그냥 _app.js에 redux compose할때 바로 생성해서 middleware넣어주면 됨.
+  - 또한 사가미들웨어에 root사가를 연결해줘야 한다. 
+```
+export default withRedux((initialState, options)=>{
+    // 사가 미들웨어 추가
+    const sagaMiddleware = createSagaMiddleware();
+
+    // 커스터마이징 코드 추가
+    const middlewares = [sagaMiddleware];
+    const enhancer = compose(
+        applyMiddleware(...middlewares),
+        !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f)=>f,
+    );
+    const store = createStore(reducer, initialState, enhancer);
+    sagaMiddleware.run(rootSaga);
+    return store;
+})(NodeBird);
+```
+
 
 
 

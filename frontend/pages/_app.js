@@ -6,6 +6,7 @@ import withRedux from 'next-redux-wrapper';
 import {Provider} from 'react-redux';
 import reducer from '../reducers';
 import {createStore, compose, applyMiddleware} from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
 const NodeBird = ({ Component, store }) => {
     return (
@@ -27,8 +28,11 @@ NodeBird.propTypes = {
 };
 
 export default withRedux((initialState, options)=>{
+    // 사가 미들웨어 추가
+    const sagaMiddleware = createSagaMiddleware();
+
     // 커스터마이징 코드 추가
-    const middlewares = [];
+    const middlewares = [sagaMiddleware];
     const enhancer = compose(
         applyMiddleware(...middlewares),
         !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f)=>f,
