@@ -597,6 +597,7 @@ export default function* userSaga(){
   - 그냥 _app.js에 redux compose할때 바로 생성해서 middleware넣어주면 됨.
   - 또한 사가미들웨어에 root사가를 연결해줘야 한다. 
   - compose할때 실제, 개발 에 따라 다르게 적용해준다.(보안적인 측면에서 redux가 노출되면 안되므로)
+  - 아래 소스는 거의 변함없이 사용할 수 있으나 하나하나 내용을 알면 더 좋음.
 ```
 export default withRedux((initialState, options)=>{
     // 사가 미들웨어 추가
@@ -615,6 +616,48 @@ export default withRedux((initialState, options)=>{
     sagaMiddleware.run(rootSaga);
     return store;
 })(NodeBird);
+```
+
+## ES2015 제너레이터
+* 함수 실행을 중간에 멈출 수 있는 함수 제너레이터 함수...
+* 함수 안에서 yield가 중단점 역할을 하고 yield 5; 이런식으로 값을 넣을 수도 있다.
+* yield* [1,2,3,4] 이런식으로 이터레이터로 줄여서 yield를 적용 할 수도있다. yield 1; yield 2; yield 3; yield 4; 와 같다.
+* 아래와 같이 async await 역할도 할 수 있다.
+```
+async(function* findUser(){
+    try{
+        let user = yield Users.findOne({}).exec();
+        user.name = 'zero';
+        user = yield user.save();
+        user = yield Users.findOne({gender:'m'}).exec();
+        ...
+    }catch(ex){
+        console.error(ex);
+    }
+});
+```
+* redux-saga가 아직 제너레이터를 쓰는 이유는 async await보다 더 강력하기때문에 쓴다.
+* 제너레이터는 while문에 무한반복문에서도 쓸 수 있다.. 이유는 yield때문에 중단이 되기때문에 한없이 무한반복이 되지 않는다.
+```
+function* g(){
+    let i=0;
+    while(true){
+        yield i++;
+    }
+}
+```
+
+## 사가의 제너레이터 이해하기
+* take : 해당 액션이 dispatch되면 제너레이터를 next하는 이펙트 이다.(saga에서는 next를 쓰지않고 take를 쓴다.)
+```
+import { take } from 'redux-saga/effects';
+
+const HELLO_SAGA = 'HELLO_SAGA';
+
+function* helloSaga(){
+    yield take(HELLO_SAGA);
+    console.log('hello saga!');
+}
 ```
 
 
