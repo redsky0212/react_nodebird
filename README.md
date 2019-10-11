@@ -596,6 +596,7 @@ export default function* userSaga(){
 * sagas폴더에 middleware.js파일을 생성한다.(middleware파일을 따로 만들어서 하면 에러가 남. )
   - 그냥 _app.js에 redux compose할때 바로 생성해서 middleware넣어주면 됨.
   - 또한 사가미들웨어에 root사가를 연결해줘야 한다. 
+  - compose할때 실제, 개발 에 따라 다르게 적용해준다.(보안적인 측면에서 redux가 노출되면 안되므로)
 ```
 export default withRedux((initialState, options)=>{
     // 사가 미들웨어 추가
@@ -603,7 +604,10 @@ export default withRedux((initialState, options)=>{
 
     // 커스터마이징 코드 추가
     const middlewares = [sagaMiddleware];
-    const enhancer = compose(
+    // 실제서비스에서는 redux가 노출 되면 안되므로 실제와 개발일때를 분리해서 적용한다.
+    const enhancer = process.env.NODE_ENV === 'production'?
+        compose(applyMiddleware(...middlewares))
+        :compose(
         applyMiddleware(...middlewares),
         !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f)=>f,
     );
