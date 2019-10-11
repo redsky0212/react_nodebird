@@ -649,17 +649,72 @@ function* g(){
 
 ## 사가의 제너레이터 이해하기
 * take : 해당 액션이 dispatch되면 제너레이터를 next하는 이펙트 이다.(saga에서는 next를 쓰지않고 take를 쓴다.)
+* while를 쓴 이유는 dispatch를 여러번 했을 경우 한번만 실행하고 제너레이터함수가 끝나버리기 때문에 while문을 써서 계속 대기하게 처리한다.
+* 이벤트 리스너를 할때 callback을 많이 사용하는데 callback을 사용하면 항상 callback헬에 직면한다. 이부분을 제너레이터가 해결.
 ```
 import { take } from 'redux-saga/effects';
 
 const HELLO_SAGA = 'HELLO_SAGA';
 
 function* helloSaga(){
-    yield take(HELLO_SAGA);
-    console.log('hello saga!');
+    console.log('before saga');
+    whild(true){
+        yield take(HELLO_SAGA);
+        console.log('hello saga!');
+    }
 }
 ```
 
+## 사가에서 반복문 제어하기
+* 각 액션에 대한 이벤트 리스너를 여러개 등록해야한다. 이럴때 all을 사용.
+  - put, delay, all 등을 사용할 수 있다.
+```
+export default function* userSaga(){
+    yield all([
+        fork(watchLogin),
+    ]);
+}
+```
+
+## takeEvery, takeLatest
+* 거의 모든 경우 while문을 써야 하므로 takeEvery를 이용하여 take(액션을 기다리는부분)부분과 실행하는 부분을 분리해서 처리 할 수 있다.
+```
+// takeEvery 사용
+function* watchHello(){
+    yield takeEvery(HELLO_SAGA, function*(){
+        yield put({
+            type:'HELLO_SUCCESS'
+        }); // 실행부분
+    });
+}
+// while 사용
+function* watchHello(){
+    while(true){
+        yield take(HELLO_SAGA);
+        console.log(1); // 실행부분
+    }
+}
+```
+* takeLatest는 takeEvery와 거의 비슷하나 다른점은 실행부에 비동기 처리가 있을경우이고 거의 동시에 여러번 액션을 처리하는 경우에는 
+  마지막것만 처리하는 기능임. (클릭을 막 눌렀을경우 최 후 마지막것만 처리하는 기능)
+```
+// takeEvery 사용
+function* watchHello(){
+    yield takeLatest(HELLO_SAGA, function*(){   // 여러번 순간적으로 호출 됬을때 마지막것만 처리 됨.
+        yield delay(1000);
+        yield put({
+            type:'HELLO_SUCCESS'
+        }); // 실행부분
+    });
+}
+// while 사용
+function* watchHello(){
+    while(true){
+        yield take(HELLO_SAGA);
+        console.log(1); // 실행부분
+    }
+}
+```
 
 
 
