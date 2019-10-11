@@ -1,8 +1,9 @@
 import { all, fork, takeLatest, call, put} from 'redux-saga/effects';
-import { LOG_IN, LOG_IN_SUCCESS, LOG_IN_FAILURE } from '../reducers/user';
+import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE } from '../reducers/user';
 
 function loginAPI(){
     // 서버요청 부분
+    // axios처리
 }
 
 function* login(){
@@ -20,7 +21,7 @@ function* login(){
 }
 
 function* watchLogin(){
-    yield takeLatest(LOG_IN, login);
+    yield takeLatest(LOG_IN_REQUEST, login);
 }
 
 export default function* userSaga(){

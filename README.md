@@ -715,7 +715,28 @@ function* watchHello(){
     }
 }
 ```
+## fork, call, 나머지 사가 정리
+* fork, call둘다 함수를 호출하는 기능
+  - fork는 비동기호출, call은 동기호출
+  - 보통 yield call(함수) 이럴때는 동기 처리 후 아래쪽 코드(yield put))를 실행해야 하는경우에 사용.
+  - fork는 비동기 호출해도 상관 없는 경우 사용.
+```
+export default function* userSaga(){
+    yield all([
+        fork(watchLogin),
+        fork(watchHello),
+    ]);
+}
+```
 
+## 사가 패턴
+* 보통 request, success, failure 이런 루틴인데 action명 정할때 사용한다. -> 패턴정하기.
+  - LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE  //이런식은 비동기 호출 네이밍이기 때문에 사가를 사용한다는 의미.
+  - 보통 loading처리는 request에서 true, success에서 false처리 해서 많이 사용한다.
 
+## eslint-config-airbnb로 코드정리
+* 일반 eslint 보다 좀 더 엄격한 코딩스타일을 원할경우 airbnb에서 제공하는 eslint를 적용해보는것도 좋음.
+* npm i -D eslint-config-airbnb 설치 그리고 .eslintrc파일에서 'extends':['airbnb'] 로 적용 코딩.
+* airbnb를 사용할 경우 하나 더 설치 해줘야 함. (npm i -D eslint-plugin-jsx-a11y) <- 웹접근성
 
 ## React backend 설치 과정 정리
