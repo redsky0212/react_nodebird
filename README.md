@@ -739,4 +739,37 @@ export default function* userSaga(){
 * npm i -D eslint-config-airbnb 설치 그리고 .eslintrc파일에서 'extends':['airbnb'] 로 적용 코딩.
 * airbnb를 사용할 경우 하나 더 설치 해줘야 함. (npm i -D eslint-plugin-jsx-a11y) <- 웹접근성
 
+## redux state와 action구조 코딩
+* 비동기 호출 일경우 사가에서 코딩하는데 거의 패턴화 됨.
+  - watch함수, 처리함수, API함수
+```
+function loginAPI(){
+    // 서버요청 부분
+    // axios처리
+}
+
+function* login(){
+    try{
+        yield call(loginAPI);
+        yield put({     // put 은 dispatch와 같은 기능
+            type:LOG_IN_SUCCESS
+        });
+    }catch(e){
+        console.error(e);
+        yield put({
+            type: LOG_IN_FAILURE
+        });
+    }
+}
+
+function* watchLogin(){
+    yield takeLatest(LOG_IN_REQUEST, login);
+}
+```
+* redux의 initialState가 매우 중요하므로 설계를 잘 해줘야 한다. 내용은 주석처리 해주는게 좋음.
+* redux의 user.js, post.js파일 github에서 소스 복붙 적용. 내용이 많음.
+
+## 로그인 리덕스 사이클 적용
+* 
+
 ## React backend 설치 과정 정리

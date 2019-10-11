@@ -1,5 +1,10 @@
+import axios from 'axios';
 import { all, fork, takeLatest, call, put} from 'redux-saga/effects';
-import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE } from '../reducers/user';
+import { 
+    LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE,
+    LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE,
+    SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE
+} from '../reducers/user';
 
 function loginAPI(){
     // 서버요청 부분

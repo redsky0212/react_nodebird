@@ -8,7 +8,7 @@ import PostCard from '../components/PostCard';
 
 const Home = () => {
     // redux의 state를 가져와 쓰는 방법
-    const { isLoggedIn, user } = useSelector(state => state.user);
+    const { isLoggedIn, me } = useSelector(state => state.user);
     const { mainPosts } = useSelector(state => state.post);
 
     // redux의 hook(useDispatch)을 이용하여 사용.
@@ -20,7 +20,7 @@ const Home = () => {
 
     return (
         <div>
-            {isLoggedIn ? <div>로그인 했습니다: {user.nickname}</div>:<div>로그아웃 했습니다.</div>}
+            {isLoggedIn ? <div>로그인 했습니다: {me.nickname}</div>:<div>로그아웃 했습니다.</div>}
             { isLoggedIn && <PostForm /> }
             {
                 mainPosts.map((v, i) => {
