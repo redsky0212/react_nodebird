@@ -770,6 +770,36 @@ function* watchLogin(){
 * redux의 user.js, post.js파일 github에서 소스 복붙 적용. 내용이 많음.
 
 ## 로그인 리덕스 사이클 적용
-* 
+* 찾기 편한 폴더구조가 좋은것.
+* action타입과 action, 리듀서를 코딩해도 되지만 action까지 코딩하기 싫으면 각 페이지에서 action호출할때 바로 action type을 바로 호출해서 사용해도 된다.
+* 리듀서(user.js)의 isLoggingIn 상태값을 사용하여 로그인버튼의 로딩이미지 표현을 한다.
+  - const { isLoggingIn } = useSelector(state=>state.user);
+* 로그인 호출 사이클 점검
+  - 먼저 로그인 폼에서 id, password를 걸어준다.
+  - 로그인버튼을 누르면 Form의 submit이 실행되서 onSubmitForm함수가 실행되고 LOG_IN_REQUEST액션이 실행되게 코딩한다. 이때 id, password를 넘겨준다.
+  - 리듀서의 action이 실행되며 동시에 사가에도 함께 걸려서 실행됨.
+  - 사가에서는 제너레이터함수로 설정해 두었던 watchLogin함수가 실행된다.
+  - 사가에서 API호출이 되어 실행완료되면 LOG_IN_SUCCESS가 실행이 되고 다시 리듀서의 LOG_IN_SUCCESS의 swich case에 걸리고 실행됨.
+  - 성공됨과 동시에 해당 state값들을 셋팅한다.
+
+## 회원가입 리덕스 사이클 적용
+* 로그인과 같은 방식으로 사이클을 적용한다.
+
+## 게시글 작성 리덕스 사이클 적용
+* 이전 사이클 적용 방식과 같다.
+* Form 같은곳에서 발생하는 함수는 preventDefault() 를 꼭 붙여준다.
+
+## next Router로 화면 이동하기
+* 회원가입 화면이 열려있는 상태에서 만약에 로그인을 하면 현재 보이는 회원가입 화면이 보이면 안되므로 화면전환을 시킨다.
+* useEffect에서 state상태를 확인할때 객체로 상태 변화를 확인하는건 좋지않다. 되도록이면 객체안에 있는 값을 체크하는게 좋음.
+* next/router를 가져와 script로 라우팅을 할 수 있다. ( ex: import router from 'next/router'; router.push('/main') )
+* javascript 객체는 항상 undefined일 수 있으므로 방어코딩을 한다. ( ex: me && me.id )
+
+## 댓글 컴포넌트 만들기
+* PostCard.js에 댓글쓰기 관련 컴포넌트 코딩을 한다.
+
+## 댓글작성 리덕스 사이클 적용
+* reducers에 관련 action을 코딩하고 사가에 같은 사이클 코딩을 한다.
+* datetime의 형식이 달라 오류나는 경우가 있음.
 
 ## React backend 설치 과정 정리

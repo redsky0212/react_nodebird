@@ -54,22 +54,25 @@ export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 
-export const loginAction = {
-    type: LOG_IN_REQUEST,
-    data: {
-        nickname: 'redsky',
+export const loginRequestAction = ({id, password}) => {
+    return {
+        type: LOG_IN_REQUEST,
+        data: {id, password}
     }
-};
-export const logoutAction = {
+}
+export const logoutRequestAction = {
     type: LOG_OUT_REQUEST,
 
 }
 // 동적인 데이터 처리는 함수로 argument를 받아서 셋팅한다.
-export const signupAction = (data) => {
+export const signupRequestAction = (data) => {
     return {
         type: SIGN_UP_REQUEST,
         data: data
     }
+}
+export const signupSuccess = {
+    type: SIGN_UP_SUCCESS,
 }
 
 export default (state = initialState, action) => {
@@ -85,7 +88,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoggingIn: false,
-                me: action.data,
+                isLoggedIn: true,
+                me: dummyUser,
                 isLoading: false,
             };
         }

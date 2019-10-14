@@ -98,7 +98,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isAddingPost: false,
-                mainPosts: [action.data, ...state.mainPosts],
+                mainPosts: [dummyPost, ...state.mainPosts],
                 postAdded: true,
             };
         }

@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 import PropTypes from 'prop-types';
-import { signupAction } from '../reducers/user';
-import {useDispatch} from 'react-redux';
+import { signupRequestAction } from '../reducers/user';
+import {useDispatch, useSelector} from 'react-redux';
+import Router from 'next/router';
 
 // custom hook 만들기 예제(같은 기능을 하는 hook을 합쳐서 custom으로 만들어서 사용)
 // 여기서는 id, nick, password 가 같으므로 custom hook을 사용한다.
@@ -23,11 +24,18 @@ const Signup = () => {
     const [term, setTerm] = useState(false);
     const [passwordError, setPasswordError] = useState(false);  // password가 틀린경우 에러체크
     const [termError, setTermError] = useState(false);          // 약관동의 안한경우 에러체크
+    const { isSigningUp, me } = useSelector(state => state.user);
 
     
     const [id, onChangeId] = useInput('');
     const [nick, onChangeNick] = useInput('');
     const [password, onChangePassword] = useInput('');
+
+    useEffect(() => {
+        if(me){
+            Router.push('/');
+        }
+    }, [me && me.id]);
 
     const onSubmit = useCallback((e) => {
         e.preventDefault();
@@ -38,7 +46,7 @@ const Signup = () => {
             return setTermError(true);
         }
 
-        dispatch(signupAction({
+        dispatch(signupRequestAction({
             id,
             password,
             nick
@@ -85,7 +93,7 @@ const Signup = () => {
                     {termError && <div style={{color:'red'}}>약관에 동의 하셔야 합니다.</div>}
                 </div>
                 <div>
-                    <Button type="primary" htmlType="submit">가입하기</Button>
+                    <Button type="primary" htmlType="submit" loading={isSigningUp}>가입하기</Button>
                 </div>
             </Form>
         </>
