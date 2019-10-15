@@ -42,7 +42,7 @@
 
 ## HTTP 요청주소 체계 이해하기
 * 최초 진입점인 index.js에 기본적인 서버 코딩을 한다.
-  - localhost:8080으로 서버를 띄우고 브라우져에서 루트로 url을 진입하면 "Hello server!" 를 띄워주는 간단한 서버코드.
+  - localhost:3065으로 서버를 띄우고 브라우져에서 루트로 url을 진입하면 "Hello server!" 를 띄워주는 간단한 서버코드.
 ```
 const express = require('express');
 
@@ -52,7 +52,36 @@ app.get('/', (req, res)=>{
     res.send('Hello server!');
 });
 
-app.listen(8080, () => {
-    console.log('server is running on http://localhost:8080');
+app.listen(3065, () => {
+    console.log('server is running on http://localhost:3065');
 });
+```
+* 요청,응답 관련(REST API, GRAPHQL)이 제일 많이 쓰임.
+* REST API 규칙이 있으나 지키기 어려우므로 적당히 타협하여 url을 작성한다.
+* http 기본 80   https 기본 443
+
+## Sequelize와 ERD
+* npm i -g sequelize-cli 를 글로벌로 다시 설치한다. (sequelize명령어를 바로 쳐서 사용하기 위함.)
+* ( sequelize init ) 쳐서 DB구성을 위한 파일들을 자동 생성해서 구성해 준다.
+* 생성된 config/config.json파일에 비밀번호 DB명 등을 셋팅해준다.
+* models/index.js파일의 내용을 수정한다.(일단 아래와같이 수정한다.)
+  - config를 불러오기 위한 url을 수정한다.
+  - models/index.js는 config값을 불러와서 sequelize인스턴스를 생성해서 사용할 수 있게 해놓은 파일이다.
+```
+const Sequelize = require('sequelize');
+const env = process.env.NODE_ENV || 'development';
+const config = require('../config/config')[env];
+const db = {};
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
+
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
 ```
