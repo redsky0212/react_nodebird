@@ -39,3 +39,20 @@
     "ext": "js json"
 }
 ```
+
+## HTTP 요청주소 체계 이해하기
+* 최초 진입점인 index.js에 기본적인 서버 코딩을 한다.
+  - localhost:8080으로 서버를 띄우고 브라우져에서 루트로 url을 진입하면 "Hello server!" 를 띄워주는 간단한 서버코드.
+```
+const express = require('express');
+
+const app = express();
+
+app.get('/', (req, res)=>{
+    res.send('Hello server!');
+});
+
+app.listen(8080, () => {
+    console.log('server is running on http://localhost:8080');
+});
+```
