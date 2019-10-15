@@ -21,6 +21,7 @@
     - sql문을 몰라도 javascript로 DB를 조작하기 위한 모듈.
   - npm i -D eslint eslint-config-airbnb eslint-plugin-jsx-a11y : 개발시 필요한 eslint
   - npm i -D nodemon : node서버는 자동 재부팅이 안되므로 자동으로 서버 재부팅 해주는 모듈.
+  - npm i mysql2 : db설치
 * 개발때는 코드 수정이 빈번하므로 package.json의 script부분을 nodemon으로 적용해서 자동재실행 되게 적용한다.
     - "scripts": {"dev":"nodemon "}
     - nodemon은 설정이 필요하다. 루트에 nodemon.json파일을 생성하여 내용을 추가한다.
@@ -60,7 +61,7 @@ app.listen(3065, () => {
 * REST API 규칙이 있으나 지키기 어려우므로 적당히 타협하여 url을 작성한다.
 * http 기본 80   https 기본 443
 
-## Sequelize와 ERD
+## Sequelize와 ERD(https://sequelize.readthedocs.io/en/v3/)
 * npm i -g sequelize-cli 를 글로벌로 다시 설치한다. (sequelize명령어를 바로 쳐서 사용하기 위함.)
 * ( sequelize init ) 쳐서 DB구성을 위한 파일들을 자동 생성해서 구성해 준다.
 * 생성된 config/config.json파일에 비밀번호 DB명 등을 셋팅해준다.
@@ -125,3 +126,21 @@ module.exports = (sequelize, DataTypes) => {
     return User;
 }
 ```
+
+## 테이블간 관계들 (https://thebook.io/006982/) <-- node교과서 책이 8장까지 공개되어있고 7장(관계정의하기)부분 참조
+* 다대다 관계의 테이블은 중간에 정리하는 테이블이 반드시 필요하다.
+  - 중간 테이블은 { through: 'PostHashtag' } 이렇게 코딩하여준다.
+* 사용자와 사용자간의 관계가 필요함(팔로윙, 팔로워) 다대다
+  - 
+* 포스트간의 관계가 필요함( 리트윗 ) 일대다
+  - 
+* 다대다 표현시 이름이 같아서 애매한경우 반드시 as를 입력해 준다. 추후 사용할때 as의 이름으로 데이터를 가져와 진다.
+* 혹시 mysql만 사용하여 쿼리문을 쓸때는 string형태의 쿼리문이라 javascript코드에서 관리하기가 힘들어진다.
+  - 그래서 mysql - knex - sequelize/typeorm 을 같이 사용하는 방법을 추천.
+* 최종 루트 index.js파일에 아래 코드 작성
+  - 각테이블 모델을 불어와서 테이블을 생성해준다.
+  - const db = require('./models');    db.sequelize.sync();
+  - models/index.js에도 각 테이블을 연결해준다. ex: db.Comment = require('./comment')(sequelize, Sequelize);
+
+## 시퀄라이즈 Q&amp;A와 DB연결하기
+* 
