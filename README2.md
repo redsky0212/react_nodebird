@@ -19,3 +19,7 @@
   - npm i sequelize sequelize-cli : DB로 mysql을 쓰는데 기본적인 CRUD기능 위주임. sequelize는 ORM(SQL문이랑 javascript랑 연결해주는 것)
     - ORM : Object-Relational Mapping
     - sql문을 몰라도 javascript로 DB를 조작하기 위한 모듈.
+  - npm i -D eslint eslint-config-airbnb eslint-plugin-jsx-a11y : 개발시 필요한 eslint
+  - npm i -D nodemon : node서버는 자동 재부팅이 안되므로 자동으로 서버 재부팅 해주는 모듈.
+  * 개발때는 코드 수정이 빈번하므로 package.json의 script부분을 nodemon으로 적용해서 자동재실행 되게 적용한다.
+    - "scripts": {"dev":"nodemon "}
