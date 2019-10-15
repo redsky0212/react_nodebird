@@ -137,10 +137,48 @@ module.exports = (sequelize, DataTypes) => {
 * 다대다 표현시 이름이 같아서 애매한경우 반드시 as를 입력해 준다. 추후 사용할때 as의 이름으로 데이터를 가져와 진다.
 * 혹시 mysql만 사용하여 쿼리문을 쓸때는 string형태의 쿼리문이라 javascript코드에서 관리하기가 힘들어진다.
   - 그래서 mysql - knex - sequelize/typeorm 을 같이 사용하는 방법을 추천.
+
+## 시퀄라이즈 Q&amp;A와 DB연결하기
 * 최종 루트 index.js파일에 아래 코드 작성
   - 각테이블 모델을 불어와서 테이블을 생성해준다.
   - const db = require('./models');    db.sequelize.sync();
   - models/index.js에도 각 테이블을 연결해준다. ex: db.Comment = require('./comment')(sequelize, Sequelize);
 
-## 시퀄라이즈 Q&amp;A와 DB연결하기
-* 
+## 백앤드 서버 API 만들기
+* 프론트에서 요청시 처리하는 컨트롤러 만들기
+* api요청 코드가 많아지면 index.js에 다 쓰기 힘드므로 파일을 분리 해야한다.
+* routes폴더를 생성하고 user.js, post.js, posts.js파일을 생성한다.
+  - 생성한 파일에서 코드작성 routes/user.js파일 참조
+* index.js에서 불러올때는 const userAPIRouter = require('./routes/user'); 가져와서 app.use('/api/user', userAPIRouter); 사용한다.
+
+## 회원가입 컨트롤러 만들기
+* post시 요청시 data가 필요한데 본문의 body에 값을 넣어서 보낸다.
+  - 컨트롤러에서 req.body를 사용하기 위해서는 index.js에 두줄의 아래 코딩이 필요하다.
+  - body의 json처리와, form데이터 처리 관련 코드...
+  - app.use(express.json()); app.use(express.urlencoded({ extended: true }));
+```
+router.post('/', async (req, res, next) => { // POST /api/user 회원가입
+    try {
+        const exUser = await db.User.findOne({
+            where: {
+                userId: req.body.userId,
+            },
+        });
+        if (exUser) {
+            return res.status(403).send('이미 사용중인 아이디입니다.');
+        }
+        const hashedPassword = await bcrypt.hash(req.body.password, 12); // salt는 10~13 사이로
+        const newUser = await db.User.create({
+            nickname: req.body.nickname,
+            userId: req.body.userId,
+            password: hashedPassword,
+        });
+        console.log(newUser);
+        return res.status(200).json(newUser);
+    } catch (e) {
+        console.error(e);
+        // 에러 처리를 여기서
+        return next(e);
+    }
+});
+```
