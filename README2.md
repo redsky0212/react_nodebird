@@ -17,5 +17,5 @@
   - npm i multer : 이미지 업로드 사용시.
   - npm i passport passport-local : 회원관리, 로그인 처리를 쉽게 할 수 있게 하는 모듈.
   - npm i sequelize sequelize-cli : DB로 mysql을 쓰는데 기본적인 CRUD기능 위주임. sequelize는 ORM(SQL문이랑 javascript랑 연결해주는 것)
-   - ORM : Object-Relational Mapping
-   - sql문을 몰라도 javascript로 DB를 조작하기 위한 모듈.
+    - ORM : Object-Relational Mapping
+    - sql문을 몰라도 javascript로 DB를 조작하기 위한 모듈.
