@@ -23,3 +23,19 @@
   - npm i -D nodemon : node서버는 자동 재부팅이 안되므로 자동으로 서버 재부팅 해주는 모듈.
 * 개발때는 코드 수정이 빈번하므로 package.json의 script부분을 nodemon으로 적용해서 자동재실행 되게 적용한다.
     - "scripts": {"dev":"nodemon "}
+    - nodemon은 설정이 필요하다. 루트에 nodemon.json파일을 생성하여 내용을 추가한다.
+    - nodemon.json (watch안에있는 파일이나 폴더가 수정되면 exec(다시실행)한다는 의미)
+```
+{
+    "watch":[
+        "index.js",
+        "routes",
+        "config",
+        "passport",
+        "models",
+        "nodemon.json"
+    ],
+    "exec": "node index.js",
+    "ext": "js json"
+}
+```
