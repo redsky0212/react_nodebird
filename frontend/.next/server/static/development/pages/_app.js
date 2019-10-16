@@ -5779,11 +5779,11 @@ const Signup = () => {
     }
 
     dispatch(Object(_reducers_user__WEBPACK_IMPORTED_MODULE_3__["signupRequestAction"])({
-      id,
+      userId: id,
       password,
-      nick
+      nickname: nick
     }));
-  }, [password, passwordCheck, term]);
+  }, [id, nick, password, passwordCheck, term]);
   const onChangePasswordChk = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(e => {
     setPasswordError(e.target.value !== password);
     setPasswordCheck(e.target.value);
@@ -6548,7 +6548,9 @@ function loginAPI() {// 서버요청 부분
   // axios처리
 }
 
-function signUpAPI() {}
+function signUpAPI(signUpData) {
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('http://localhost:3065/api/user/', signUpData);
+}
 
 function* login() {
   try {
@@ -6566,12 +6568,11 @@ function* login() {
   }
 }
 
-function* signUp() {
+function* signUp(action) {
   try {
-    //yield call(signUpAPI);
-    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(2000);
-    throw new Error('회원가입 에러!!');
-    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(2000);
+    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["call"])(signUpAPI, action.data); // throw new Error('회원가입 에러!!');
+    //yield delay(2000);
+
     yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
       // put 은 dispatch와 같은 기능
       type: _reducers_user__WEBPACK_IMPORTED_MODULE_2__["SIGN_UP_SUCCESS"]

@@ -10,8 +10,8 @@ function loginAPI(){
     // 서버요청 부분
     // axios처리
 }
-function signUpAPI(){
-
+function signUpAPI(signUpData){
+    return axios.post('http://localhost:3065/api/user/', signUpData);
 }
 
 function* login(){
@@ -28,12 +28,11 @@ function* login(){
         });
     }
 }
-function* signUp() {
+function* signUp(action) {
     try {
-        //yield call(signUpAPI);
-        yield delay(2000);
-         throw new Error('회원가입 에러!!');
-        yield delay(2000);
+        yield call(signUpAPI, action.data);
+        // throw new Error('회원가입 에러!!');
+        //yield delay(2000);
         yield put({     // put 은 dispatch와 같은 기능
             type: SIGN_UP_SUCCESS
         });

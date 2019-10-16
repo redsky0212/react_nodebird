@@ -154,9 +154,10 @@ module.exports = (sequelize, DataTypes) => {
 ## 회원가입 컨트롤러 만들기
 * post시 요청시 data가 필요한데 본문의 body에 값을 넣어서 보낸다.
   - 컨트롤러에서 req.body를 사용하기 위해서는 index.js에 두줄의 아래 코딩이 필요하다.
-  - body의 json처리와, form데이터 처리 관련 코드...
+  - body의 json처리와, form데이터 body에 넣어주는 처리 관련 코드...
   - app.use(express.json()); app.use(express.urlencoded({ extended: true }));
 ```
+// 회원가입 API
 router.post('/', async (req, res, next) => { // POST /api/user 회원가입
     try {
         const exUser = await db.User.findOne({
@@ -182,3 +183,18 @@ router.post('/', async (req, res, next) => { // POST /api/user 회원가입
     }
 });
 ```
+
+## 실제 회원가입과 미들웨어들
+* frontend쪽에 회원가입 요청을 axios를 통해서 호출하는 코드를 작성한다.
+* backend쪽 index.js에서 로그관련 미들웨어를 끼워준다. 
+  - const morgan = require('morgan'); app.use(morgan('dev'));  // 서버쪽 로그 남기는 미들웨어
+  - cors 크로스도메인 에러처리 
+```
+const cors = require('cors');
+
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
+```
+* 위와같이 미들웨어는 app.use를 통해 요청과 응답 사이에 끼워서 추가된 기능을 처리 하게 하는것.

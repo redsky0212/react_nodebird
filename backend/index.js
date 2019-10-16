@@ -1,4 +1,6 @@
 const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
 const db = require('./models');
 
 const userAPIRouter = require('./routes/user');
@@ -7,6 +9,13 @@ const postsAPIRouter = require('./routes/posts');
 
 const app = express();
 db.sequelize.sync(); 
+
+app.use(morgan('dev'));
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
