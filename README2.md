@@ -28,7 +28,7 @@
     - nodemon.json (watch안에있는 파일이나 폴더가 수정되면 exec(다시실행)한다는 의미)
 ```
 {
-    "watch":[
+    "watch":[           // nodemon이 항상 확인하는 파일,폴더들을 적는다.
         "index.js",
         "routes",
         "config",
@@ -36,8 +36,8 @@
         "models",
         "nodemon.json"
     ],
-    "exec": "node index.js",
-    "ext": "js json"
+    "exec": "node index.js",    // 변경이 이루어졌을때 실행할 명령
+    "ext": "js json"            // 
 }
 ```
 
@@ -143,6 +143,13 @@ module.exports = (sequelize, DataTypes) => {
   - 각테이블 모델을 불어와서 테이블을 생성해준다.
   - const db = require('./models');    db.sequelize.sync();
   - models/index.js에도 각 테이블을 연결해준다. ex: db.Comment = require('./comment')(sequelize, Sequelize);
+
+## mysql, 시퀄라이즈 사용시 알아둘 체크사항
+* mysql 8버전 사용시 아래 에러가 발생할 수 있다.
+  - SequelizeConnectionError: Client does not support authentication protocol requested byserver; consider upgrading MySQL client
+  - 이럴때는 설치파일 .msi를 다시 실행하여 reconfig하여 Authentication Method단계에서 체크박스(Use Legacy Authentication Method)를 체크해준다.
+  - 아니면 MySQL 5.7을 설치하여 사용하면 된다.
+
 
 ## 백앤드 서버 API 만들기
 * 프론트에서 요청시 처리하는 컨트롤러 만들기
