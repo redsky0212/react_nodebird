@@ -6,18 +6,19 @@ import {
     SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE
 } from '../reducers/user';
 
-function loginAPI(){
+function loginAPI(loginData){
     // 서버요청 부분
     // axios처리
+    return axios.post('http://localhost:3065/api/user/login', loginData);
 }
 function signUpAPI(signUpData){
     return axios.post('http://localhost:3065/api/user/', signUpData);
 }
 
-function* login(){
+function* login(action){
     try{
-        //yield call(loginAPI);
-        yield delay(2000);
+        yield call(loginAPI, action.data);
+        //yield delay(2000);
         yield put({     // put 은 dispatch와 같은 기능
             type:LOG_IN_SUCCESS
         });

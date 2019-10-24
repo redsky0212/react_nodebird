@@ -263,4 +263,62 @@ app.use(passport.session());
   - JWT사용에 관한 설명... 진짜 대규모 이외에는 쿠키,세션을 사용하는게 좋음.
 
 ## passport 로그인 전략
-* 
+* 로그인 관련 전략 코딩을 passport/local.js에 코딩한다.
+  - 이 로그인전략 코딩을 사용하기 위해서
+  - 루트 index.js에 아래 소스를 추가한다.
+```
+const passportConfig = require('./passport'); 
+
+passportConfig();
+```
+  - passport/index.js에서는 local파일을 불러와야하기 때문에 아래내용 소스추가한다.
+```
+const local = require('./local');
+
+local();
+```
+* 실제로 frontend에서는 로그인 api호출시 서버에서는 routes/user.js에 요청을 보내므로 해당 로그인 api함수에서 passport로그인전략을 실행 해줘야 한다.
+  - routes/user.js의 로그인 부분 소스
+```
+const passport = require('passport');   // passport를 불러온다.
+
+router.post('/login', (req, res, next) => { // POST /api/user/login
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {          // 서버 에러가 났을경우
+            console.error(err);
+            return next(err);
+        }
+        if (info) {         // 로직상에 오류가 났을경우
+            return res.status(401).send(info.reason);
+        }
+        return req.login(user, async (loginErr) => {
+            try {
+                if (loginErr) {
+                    return next(loginErr);
+                }
+                const fullUser = await db.User.findOne({
+                    where: { id: user.id },
+                    include: [{             // 데이터 추가
+                        model: db.Post,
+                        as: 'Posts',
+                        attributes: ['id'],
+                    }, {
+                        model: db.User,
+                        as: 'Followings',
+                        attributes: ['id'],
+                    }, {
+                        model: db.User,
+                        as: 'Followers',
+                        attributes: ['id'],
+                    }],
+                    attributes: ['id', 'nickname', 'userId'],
+                });
+                console.log(fullUser);
+                return res.json(fullUser);
+            } catch (e) {
+                next(e);
+            }
+        });
+    })(req, res, next);
+});
+```

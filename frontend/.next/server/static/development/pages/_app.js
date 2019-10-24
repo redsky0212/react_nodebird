@@ -309,7 +309,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const LoginForm = () => {
-  const [id, onChangeId] = Object(_pages_signup__WEBPACK_IMPORTED_MODULE_3__["useInput"])('');
+  const [userId, onChangeUserId] = Object(_pages_signup__WEBPACK_IMPORTED_MODULE_3__["useInput"])('');
   const [password, onChangePassword] = Object(_pages_signup__WEBPACK_IMPORTED_MODULE_3__["useInput"])('');
   const dispatch = Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["useDispatch"])();
   const {
@@ -318,14 +318,14 @@ const LoginForm = () => {
   const onSubmitForm = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(e => {
     e.preventDefault();
     console.log({
-      id,
+      userId,
       password
     });
     dispatch(Object(_reducers_user__WEBPACK_IMPORTED_MODULE_5__["loginRequestAction"])({
-      id,
+      userId,
       password
     }));
-  }, [id, password]);
+  }, [userId, password]);
   return __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Form"], {
     onSubmit: onSubmitForm,
     style: {
@@ -357,8 +357,8 @@ const LoginForm = () => {
     __self: undefined
   }), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Input"], {
     name: "user-id",
-    value: id,
-    onChange: onChangeId,
+    value: userId,
+    onChange: onChangeUserId,
     required: true,
     __source: {
       fileName: _jsxFileName,
@@ -6308,13 +6308,13 @@ const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 const loginRequestAction = ({
-  id,
+  userId,
   password
 }) => {
   return {
     type: LOG_IN_REQUEST,
     data: {
-      id,
+      userId,
       password
     }
   };
@@ -6544,18 +6544,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function loginAPI() {// 서버요청 부분
+function loginAPI(loginData) {
+  // 서버요청 부분
   // axios처리
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('http://localhost:3065/api/user/login', loginData);
 }
 
 function signUpAPI(signUpData) {
   return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('http://localhost:3065/api/user/', signUpData);
 }
 
-function* login() {
+function* login(action) {
   try {
-    //yield call(loginAPI);
-    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(2000);
+    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["call"])(loginAPI, action.data); //yield delay(2000);
+
     yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
       // put 은 dispatch와 같은 기능
       type: _reducers_user__WEBPACK_IMPORTED_MODULE_2__["LOG_IN_SUCCESS"]

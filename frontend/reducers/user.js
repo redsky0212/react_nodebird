@@ -54,10 +54,10 @@ export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 
-export const loginRequestAction = ({id, password}) => {
+export const loginRequestAction = ({ userId, password }) => {
     return {
         type: LOG_IN_REQUEST,
-        data: {id, password}
+        data: { userId, password }
     }
 }
 export const logoutRequestAction = {

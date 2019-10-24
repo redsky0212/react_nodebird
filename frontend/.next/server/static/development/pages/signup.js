@@ -2005,13 +2005,13 @@ const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 const loginRequestAction = ({
-  id,
+  userId,
   password
 }) => {
   return {
     type: LOG_IN_REQUEST,
     data: {
-      id,
+      userId,
       password
     }
   };
