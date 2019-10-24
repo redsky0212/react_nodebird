@@ -206,3 +206,61 @@ app.use(cors({
 ```
 * 위와같이 미들웨어는 app.use를 통해 요청과 응답 사이에 끼워서 추가된 기능을 처리 하게 하는것.
 * get, post, put 등을 처리하기 전에 OPTIONS를 먼저 보내서 확인하고 성공시 이 후 진행 한다. 
+
+## 로그인을 위한 미들웨어들
+* id, password를 비교해보고 맞으면 
+* 로그인을 했을때는 로그인을 했다는 정보를 서버에 남기고 일부분 frontend쪽에서 넘겨줘야한다.
+* 로그인 처리 및 정보는 민감한 사항이라 서버에서 처리를 하고 frontend는 서버와 연결되기 전에는 전혀 알 수가 없다.
+* 인증처리, 인증을 받아오고 그다음 frontend로 보낸다. 보통 가장 쉬운게 쿠키로 처리를 많이함.
+* 사용자정보는 서버세션에, frontend에는 세션을 조회할 수 있는 쿠키를 전달한다.
+* 그래서 우선 쿠키와 세션을 서버에 설정해준다.
+  -- index.js파일에 아래 코딩
+```
+const cookieParser = require('cookie-parser');
+const expressSession = require('express-session');
+
+app.use(cookieParser('nodebirdcookie'));    // secret값과 같이 넣음.(보안을 위하여 이렇게 수정되어야 함 : process.env.COOKIE_SECRET)
+app.use(expressSession({
+    resave: false,          // 매번 세션 강제 저장 (보통 거의 false)
+    saveUninitialized: false,   // 빈 값도 저장 (보통 거의 false)
+    secret: 'nodebirdcookie',   // 쿠키값 암호화 키같은 역할(보안을 위하여 이렇게 수정되어야 함 : process.env.COOKIE_SECRET)
+    cookie: {
+        httpOnly: true, // javascript 로 쿠키에 접근하지 못하게 하는 기능
+        secure: false,  // https사용때 켬.
+    }
+}));
+```
+* 소스코드가 털렸을 경우를 대비하여 민감한 string값들에 대한 대비로 루트에 .env파일 생성 적용 방법 (.env파일은 git에도 올리지 않는다.)
+  - 루트에 .env파일을 생성하고 민감정보를 아래와 같은 방식으로 값을 넣어준다.
+```
+COOKIE_SECRET=cookiesecret
+DB_PASSWORD=nodejsbook
+```
+  - index.js파일이나 필요한 곳에서 const dotenv = require('dotenv');  dotenv.config();  해서 불러온 다음
+  - process.env.COOKIE_SECRET 해서 불러와 넣어줄 수 있다.
+  - config.json같은 json에서는 변수를 사용해서 process.env.COOKIE_SECRET 이렇게 사용할 수 없으므로
+  - config.json파일을 config.js 파일로 바꿔서 다시 만들고 난 후 내용의 json을 module.exports = {} 해준다음 const dotenv = require('dotenv');  dotenv.config(); 해서 process.env.DB_PASSWORD 사용한다.
+
+## passport와 쿠키,세션 동작원리
+* 로그인 처리시 id, password확인 쿠키, 세션 처리 하고 또 매번 현재 로그인한 사용자가 누구인가를 찾는 기능이 필요한데 그것을 자동화 하는 passport.
+  - passport.session()은 반드시 expressSession 아래에 적어야 한다. (서로 의존관계에 있는것들은 순서가 중요.)
+  - passport.session은 내부적으로 expressSession을 사용한다.
+  - 사실 passport가 없어도 되지만 매번 라우터에 front 쿠키보내기, 서버 세션두기, 로그인한 사용자 체크 를 하기 때문에 안전하게 사용하기 위해서 씀.
+```
+const passport = require('passport');
+
+app.use(passport.initialize());
+app.use(passport.session());
+```
+* 위 까지 진행 후 passport폴더 생성하고 안쪽에 index.js, local.js파일을 생성한다.
+  - 어느 폴더든 index.js파일은 해당 폴더 js파일의 총괄하는 역할.
+  - 다른 sns랑 연관하여 로그인 하는 경우도 있는데 그 처리를 index.js함.
+* passport.serializeUser, passport.deserializeUser에 대한 설명 하기전 대략 설명
+  - 사용자가 로그인을 하면 그 로그인 정보를 세션에 저장하는데, 로그인 사용자 정보 데이터는 엄청난 양 이기 때문에 메모리세션에 저장을 하면 문제가 생김.
+  - 그로인해 passport.serializeUser는 frontend에서 보내온 cookie값으로 해당 사용자정보의 id를 찾아 세션에 저장을 하고,
+  - 그 id와 관련된 사용자 정보를 db에서 불러(passport.deserializeUser)와 request에 포함시킨다.
+  - 간단히 말해서 frontend에서 보낸 cookie를 가지고 서버에서는 해당 쿠키의 id를 찾아 db에서 해당 id의 사용자 정보를 찾아서 request에 보낸다.
+  - JWT사용에 관한 설명... 진짜 대규모 이외에는 쿠키,세션을 사용하는게 좋음.
+
+## passport 로그인 전략
+* 
