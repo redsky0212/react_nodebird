@@ -5944,8 +5944,7 @@ const signupSuccess = {
       {
         return Object(_babel_runtime_corejs2_helpers_esm_objectSpread__WEBPACK_IMPORTED_MODULE_0__["default"])({}, state, {
           isLoggingIn: false,
-          isLoggedIn: true,
-          me: dummyUser,
+          me: action.data,
           isLoading: false
         });
       }

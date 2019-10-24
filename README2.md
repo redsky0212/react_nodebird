@@ -322,3 +322,140 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
     })(req, res, next);
 });
 ```
+
+## 실제 로그인 처리
+* 공통된 api url은 빼놓는다.
+  - axios.defaults.baseURL = 'http://localhost:3065/api';
+* 로그인 성공 했을때 가져온 action.data를 반환해준다.(reducers/user.js)
+```
+case LOG_IN_SUCCESS: {
+            return {
+                ...state,
+                isLoggingIn: false,
+                isLoggedIn: true,
+                me: action.data,
+                isLoading: false,
+            };
+        }
+```
+
+## 다른 도메인간 쿠키 주고 받기
+* 로그인 처리 중 post로 해도 id, password는 그대로 노출이 되므로 https를 사용하는게 좋음.
+* 다른 도메인의 쿠키 주고 받기를 하려면 frontend, backend모두 셋팅을 해줘야함.
+  - frontend : return axios.post('/user/login', loginData, {withCredentials:true}); (axios보낼때 세번째 인자로 withCredentials를 true로 셋팅))
+  - backend : index.js에 내용 셋팅. 서버 재시작 필요.
+```
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
+```
+  - 로그인 호출시 post호출 전에 options를 먼저 호출하는데 그부분의 값들이 아래와 같아야함.
+```
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: content-type
+Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE
+Access-Control-Allow-Origin: http://localhost:3000
+```
+  - 잘 되었으면 frontend쪽 쿠키에 connect.sid라고 저장이 된다.
+  - express에서 생성한 이 connect.sid 이름은 수정 해주는게 좋음.(name부분에 넣음. 되도록이면 이상한 이름으로...)
+```
+app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true, // javascript 로 쿠키에 접근하지 못하게 하는 기능
+        secure: false,  // https사용때 켬.
+    },
+    name: 'rnbck'
+}));
+```
+  - 또한 지금도 새로고침 하면 로그인이 풀린다. 왜냐하면 쿠키는 남아있고 로그인이 되어있지만 최초 사용자정보를 가져오는 부분을 만들어 줘야 한다.(추후진행)
+
+## include 와 as, foreignKey
+* 우선 models/index.js파일의 sequelize 코딩시 주의할점
+  - 테이블이 생성된 후 associate 함수를 호출 할 수 있으므로 코딩 순서에 주의 해야함. 테이블과의 관계설정을 하려면 테이블이 먼저 필요하므로.
+```
+db.Comment = require('./comment')(sequelize, Sequelize);
+db.Hashtag = require('./hashtag')(sequelize, Sequelize);
+db.Image = require('./image')(sequelize, Sequelize);
+db.Post = require('./post')(sequelize, Sequelize);
+db.User = require('./user')(sequelize, Sequelize);
+
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+```
+* 쿼리의 JOIN과 같은 기능의 include
+```
+const fullUser = await db.User.findOne({
+    where: { id: user.id },
+    include: [{
+        model: db.Post,
+        as: 'Posts',        // models파일에 as가 설정되어있으면 여기도 똑같이 넣어준다.
+        attributes: ['id'],
+    }, {
+        model: db.User,
+        as: 'Followings',
+        attributes: ['id'], // 가져올 값만 셋팅
+    }, {
+        model: db.User,
+        as: 'Followers',
+        attributes: ['id'],
+    }],
+    attributes: ['id', 'nickname', 'userId'],
+});
+```
+* 다대다(belongsToMany)로 연결시 foreignKey를 설정(상대방id)한다. foreignKey자체가 다른테이블 id를 쓰고있기때문.
+
+## 로그아웃과 사용자 정보 가져오기
+* 새로고침하면 쿠키도 있고 로그인도 되어있지만 처음 화면에서 사용자 정보를 안가져 오므로 로그아웃처럼 보이는 현상을 수정하기 위해 사용자정보를 가져온다.
+* 우선 순서대로 sagas/user.js에 logout과 loadUser를 코딩한다.
+* reducers/user.js에도 해당 action에 맞게 소스코딩 해준다.
+* 사용자 정보를 가져오는 부분은 최초 사용자가 어느 페이지를 접속할지 모르기 때문에 공통 레이아웃(AppLayout.js) 부분에 관련 코딩을 한다.
+  - useEffect를 이용하여 코딩
+```
+const { isLoggedIn, me } = useSelector(state => state.user);
+const dispatch = useDispatch();
+useEffect(() => {
+    if (!me) {
+        dispatch({
+            type: LOAD_USER_REQUEST,
+        });
+    }
+}, []);
+```
+* 다음 backend의 routes/user.js에 관련 api코딩을 한다. 비밀번호는 항상 유의.
+```
+router.get('/', (req, res) => { // /api/user/
+    if (!req.user) {
+        return res.status(401).send('로그인이 필요합니다.');
+    }
+    const user = Object.assign({}, req.user.toJSON());
+    delete user.password;
+    return res.json(user);
+});
+```
+* 최초 가져온 사용자정보를 통하여 me값으로 로그인창을 제어하게끔 수정. me값이 있는지 여부를 통하여 로그인되어있는창 보이기 처리.
+* isLoggedIn과 me가 겹치므로 isLoggedIn을 삭제.
+* 참고로 backend 서버가 재시작 되면 사용자 로그인 정보가 메모리에서 다 날라가므로 로그인이 풀려버림.
+  - 그래서 실무에서는 로그인한 사용자 정보를 따로 redis서버나 다른서버를 사용해서 항상 저장을 해놓고 있으므로 서버가 재시작 되어도 상관없음.
+  - 추 후 expressSession부분에 아래와 같이 store를 설정할 수 있다.
+```
+app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true, // javascript 로 쿠키에 접근하지 못하게 하는 기능
+        secure: false,  // https사용때 켬.
+    },
+    name: 'rnbck',
+    store: RedisStore // 따로 사용자 정보를 저장할 곳
+}));
+```
+## 게시글 작성과 데이터 관계 연결하기
+* 

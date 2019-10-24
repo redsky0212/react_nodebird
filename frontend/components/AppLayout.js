@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, Input, Button, Row, Col, Card, Avatar } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
+import { LOAD_USER_REQUEST } from '../reducers/user';
 
 const AppLayout = ({children}) => {
-    const { isLoggedIn } = useSelector(state => state.user);
+    const { me } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!me) {
+            dispatch({
+                type: LOAD_USER_REQUEST,
+            });
+        }
+    }, []);
 
     return (
         <div>
@@ -20,7 +30,7 @@ const AppLayout = ({children}) => {
             <Link href="/signup"><a><Button>회원가입</Button></a></Link>
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn? <UserProfile /> : <LoginForm /> }
+                    {me? <UserProfile /> : <LoginForm /> }
                 </Col>
                 <Col xs={24} md={12}>
                     {children}

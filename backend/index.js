@@ -30,7 +30,8 @@ app.use(expressSession({
     cookie: {
         httpOnly: true, // javascript 로 쿠키에 접근하지 못하게 하는 기능
         secure: false,  // https사용때 켬.
-    }
+    },
+    name: 'rnbck'
 }));
 app.use(passport.initialize());
 app.use(passport.session());
