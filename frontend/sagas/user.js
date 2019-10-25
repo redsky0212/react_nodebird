@@ -9,9 +9,6 @@ import {
     LOAD_USER_SUCCESS,
 } from '../reducers/user';
 
-axios.defaults.baseURL = 'http://localhost:3065/api';
-
-
 function loginAPI(loginData){
     // 서버요청 부분
     // axios처리

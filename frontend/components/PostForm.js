@@ -13,15 +13,20 @@ const PostForm = () => {
 
     useEffect(() => {
         setText('');
-    }, [postAdded === true]);
+    }, [postAdded]);
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();
+        if (!text || !text.trim()) {
+            return alert('게시글을 작성하세요.');
+        }
         dispatch({
             type: ADD_POST_REQUEST,
-            data: { text },
+            data: {
+                content: text.trim(),
+            },
         });
-    }, []);
+    }, [text]);
 
     const onChangeText = useCallback((e) => {
         e.preventDefault();

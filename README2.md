@@ -458,4 +458,12 @@ app.use(expressSession({
 }));
 ```
 ## 게시글 작성과 데이터 관계 연결하기
+* 시퀄라이즈로 각 테이블을 생성하고 관계를 형성하면 각 테이블에 add..., remove..., get... 등으 메서드가 자동 생성된다. (스터디 필요)
+* import 로 불러온 모듈은 모든 파일에서 공유가 되므로 axios.defaults.baseURL = 'http://localhost:3065/api';은 다른파일에서도 그대로 적용됨.
+  - 그래서 보통 모양이 좋지 않으므로 해당 폴더의 공통인 index.js쪽으로 빼서 셋팅한다.
+* 우선 backend/routes/post.js파일에 게시글관련 api소스를 코딩한다.
+* frontend에서는 게시글 작성 후 버튼 클릭시 해당 게시글작성api(/api/post)를 호출하는 소스를 코딩한다. reducers/post.js, sagas/post.js
+
+## 게시글 불러오기
+* routes/posts.js쪽에 게시글 가져오는 부분 코딩을 한다.
 * 
