@@ -5393,20 +5393,39 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const NodeBird = ({
   Component,
-  store
+  store,
+  pageProps
 }) => {
   return __jsx(react_redux__WEBPACK_IMPORTED_MODULE_5__["Provider"], {
     store: store
   }, __jsx(next_head__WEBPACK_IMPORTED_MODULE_1___default.a, null, __jsx("title", null, "\uB178\uB4DC\uBC84\uB4DC"), __jsx("link", {
     rel: "stylesheet",
     href: "https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.5/antd.min.css"
-  })), __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_2__["default"], null, __jsx(Component, null)));
+  })), __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_2__["default"], null, __jsx(Component, pageProps)));
 };
 
 NodeBird.propTypes = {
   Component: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.elementType,
   store: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.object
 };
+
+NodeBird.getInitialProps = async context => {
+  console.log(context);
+  const {
+    ctx,
+    Component
+  } = context;
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return {
+    pageProps
+  };
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (next_redux_wrapper__WEBPACK_IMPORTED_MODULE_4___default()((initialState, options) => {
   // 사가 미들웨어 추가
   const sagaMiddleware = redux_saga__WEBPACK_IMPORTED_MODULE_8___default()(); // 커스터마이징 코드 추가

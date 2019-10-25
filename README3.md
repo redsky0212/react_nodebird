@@ -93,3 +93,74 @@ server.get('/user/:id', (req, res) => {
     return app.render(req, res, '/user', { id: req.params.id });
 });
 ```
+* 위 소스에서 나온 hashtag.js, user.js파일이 없으므로 생성해서 소스를 채워준다.
+* 각 페이지js에는 'getInitialProps'메서드가 있음.(next에서 제공하는 메서드)
+  - app.render(req, res, '/hashtag', { tag: req.params.tag }); 이런식으로 넘겨받은 context값을 
+  - 아래와 같이 받아서 props로 적용 해서 사용할 수 있음.
+```
+Hashtag.getInitialProps = async (context) => {
+    console.log('hashtag getInitialProps', context.query.tag);
+    return { tag: context.query.tag };      // return하면 컴포넌트의 props로 전달된다.
+};
+```
+* 각 페이지에서 getInitialProps를 사용하려면 상위 _app.js에 아래 코딩 셋팅 해줘야 연결이 됨
+  - Component는 각 페이지를 의미함.
+```
+NodeBird.getInitialProps = async (context) => {
+  console.log(context);
+  const { ctx, Component } = context;
+  let pageProps = {};
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+  return { pageProps }; // 이부분은 _app.js의 Component의 props로 넘겨줘야함.
+};
+```
+* getInitialProps : next의 이 라이프 사이클은 매주 중요 (서버, frontend)모두 실행이 되는 메서드임.
+  - 추 후 서버사이드 렌더링할때도 많이 쓰임.
+
+## 해시태그 검색, 유저 정보 라우터 만들기
+* 
+
+# 서버사이드 렌더링
+## 서버사이드 렌더링(SSR)
+* SPA 에서 검색엔진 노출을 위한 작업 필요.
+* postman을 이용하여 체크
+* next를 쓰는 가장 큰 이유... 서버사이드 렌더링(getInitialProps: 메서드에서 데이터를 가져올 수 있다.)
+* 최초 화면 로딩할때 가져오는 useEffect에서 호출하는 dispatch하는 데이터를 모두 getInitialProps 쪽으로 옮겨온다.
+  - dispatch는 getInitialProps에서 넘겨받은 context.store에서 가져올수있다.
+  - 하지만 실행이 제대로 안됨. 상위 _app.js에서 하나 더 설정 해줘야함.
+  - npm i next-redux-saga를 설치하고 withReduxSaga를 연결해서 next에서 saga를 사용할 수 있게 해줘야 서버사이드렌더링을 제대로 할 수 있다.
+```
+import withReduxSaga from 'next-redux-saga';
+
+const configureStore = (initialState, options) => {
+  const sagaMiddleware = createSagaMiddleware();
+  const middlewares = [sagaMiddleware];
+  const enhancer = process.env.NODE_ENV === 'production'
+    ? compose(applyMiddleware(...middlewares))
+    : compose(
+      applyMiddleware(...middlewares),
+      !options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
+    );
+  const store = createStore(reducer, initialState, enhancer);
+  store.sagaTask = sagaMiddleware.run(rootSaga);    // 이 부분을 추가 코딩 해줘야함.(서버사이드렌더링을 위함)
+  return store;
+};
+
+export default withRedux(configureStore)(withReduxSaga(NodeBird));
+```
+
+## SSR을 위해 쿠키 넣어주기
+* 서버사이드렌더링으로 바뀜에 따라서 문제가 발생한다.
+  - client가 서버로 요청을 보낼때 withCredentials: true, 이런 부분에서 동작이 되지 않을 가능성이 있음.
+  - client의 browser가 쿠키를 같이 동봉해서 보내므로 괜찮으나
+  - 서버사이드렌더링일때는 browser가 따로 없으므로 쿠키를 따로 넣어주는 역할을 하지않으므로 직접 넣어서 보내줘야한다.
+  - getInitialProps의 context.ctx.req.headers.cookie에 그 값이 있으므로 그 값을 직접 axios요청시 보내준다.
+  - axios.defaults.headers.Cookie = 쿠키값;
+  - 한번 해주면 모든 axios에 다 적용이 됨.
+  - client환경인지 서버환경인지 체크해서 서버환경일때만 넣어주는 로직으로 작성하는게 좋음.
+  - ctx.isServer로 체크하여 분기를 한다.
+
+## SSR에서 내정보 처리하기
+* 
