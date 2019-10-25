@@ -4,6 +4,8 @@ import PropsTypes from 'prop-types';
 import {useSelector, useDispatch} from 'react-redux';
 import { ADD_COMMENT_REQUEST } from '../reducers/post';
 
+import PostCardContent from './PostCardContent';
+
 const PostCard = ({v}) => {
     const [commentFormOpened, setCommentFormOpened] = useState(false);
     const [commentText, setCommentText] = useState('');
@@ -50,7 +52,7 @@ const PostCard = ({v}) => {
             <Card.Meta
                 avatar={<Avatar>{v.User.nickname[0]}</Avatar>}
                 title={v.User.nickname}
-                description={v.content}
+                description={<PostCardContent postData={v.content} />}
             />
         </Card>
         {commentFormOpened && (
