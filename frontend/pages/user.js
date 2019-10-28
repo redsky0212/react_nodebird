@@ -6,21 +6,11 @@ import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 import PostCard from '../components/PostCard';
 
-const User = ({ id }) => {
+const User = () => {
     const dispatch = useDispatch();
     const { mainPosts } = useSelector(state => state.post);
     const { userInfo } = useSelector(state => state.user);
 
-    useEffect(() => {
-        dispatch({
-            type: LOAD_USER_REQUEST,
-            data: id,
-        });
-        dispatch({
-            type: LOAD_USER_POSTS_REQUEST,
-            data: id,
-        });
-    }, []);
     return (
         <div>
             {userInfo
@@ -58,13 +48,18 @@ const User = ({ id }) => {
     );
 };
 
-User.propTypes = {
-    id: PropTypes.number.isRequired,
-};
-
 User.getInitialProps = async (context) => {
-    console.log('user getInitialProps', context.query.id);
-    return { id: parseInt(context.query.id, 10) };
+    const id = parseInt(context.query.id, 10);
+    console.log('user getInitialProps', id);
+    context.store.dispatch({
+        type: LOAD_USER_REQUEST,
+        data: id,
+    });
+    context.store.dispatch({
+        type: LOAD_USER_POSTS_REQUEST,
+        data: id,
+    });
+    return { id };
 };
 
 export default User;

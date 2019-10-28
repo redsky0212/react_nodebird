@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import {Card, Avatar, Button} from 'antd';
 import {useSelector, useDispatch} from 'react-redux';
-import { logoutRequestAction } from '../reducers/user';
+import { LOG_OUT_REQUEST } from '../reducers/user';
 
 const UserProfile = () => {
     const { me } = useSelector(state => state.user);
@@ -9,7 +9,7 @@ const UserProfile = () => {
 
     const onLogout = useCallback((e) => {
         e.preventDefault();
-        dispatch(logoutRequestAction);
+        dispatch({ type: LOG_OUT_REQUEST, });
     }, []);
 
     return (

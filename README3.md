@@ -123,14 +123,31 @@ NodeBird.getInitialProps = async (context) => {
 * 
 
 # === 서버사이드 렌더링 ===
-## 서버사이드 렌더링(SSR)
+## 서버사이드 렌더링(SSR) (localhost:3060 으로 바꿈)(https://github.com/ZeroCho/react-nodebird/tree/master/ch7/front)
 * SPA 에서 **검색엔진 노출**을 위한 작업 필요.
-* postman을 이용하여 체크
+* postman을 이용하여 체크(사이트를 요청해서 화면의 상태를 확인할 수 있다.)
+  - localhost:3060을 postman으로 확인해 보면 ajax로 가져오는 컨텐츠 부분이 모두 비어있는것을 확인할 수 있다.
+* 서버사이드렌더링은 pages쪽 화면들만 가능하다.
 * next를 쓰는 가장 큰 이유... 서버사이드 렌더링(getInitialProps: 메서드에서 데이터를 가져올 수 있다.)
+  - getInitialProps는 서버쪽, client쪽에서 한번씩 실행되므로 이곳에서 SSR을 처리한다.
+* 우선 pages/index.js 파일을 SSR처리 해보자.
+  - useEffect에서 처리한 dispatch 부분을 모두 getInitialProps 쪽으로 옮긴다.
+  - dispatch메서드는 context.store에서 가져올 수 있다.
+  - 상위 _app.js 에서 넘겨준 pageProps = await Component.getInitialProps(ctx); ctx가 context이다.
+```
+Home.getInitialProps = async (context) => {
+  console.log(Object.keys(context));
+  context.store.dispatch({
+    type: LOAD_MAIN_POSTS_REQUEST,
+  });
+};
+```
 * 최초 화면 로딩할때 가져오는 useEffect에서 호출하는 dispatch하는 데이터를 모두 getInitialProps 쪽으로 옮겨온다.
   - dispatch는 getInitialProps에서 넘겨받은 context.store에서 가져올수있다.
   - 하지만 실행이 제대로 안됨. 상위 _app.js에서 하나 더 설정 해줘야함.
   - npm i next-redux-saga를 설치하고 withReduxSaga를 연결해서 next에서 saga를 사용할 수 있게 해줘야 서버사이드렌더링을 제대로 할 수 있다.
+  - _app.js에 hoc방식으로 연결해준다. withRedux(configureStore)(withReduxSaga(NodeBird))
+  - withReduxSaga는 config함수를 넣어주는 부분이 없으므로 store에 (store.sagaTask = sagaMiddleware.run(rootSaga);) 부분을 연결해줘야 한다.
 ```
 import withReduxSaga from 'next-redux-saga';
 
@@ -152,6 +169,33 @@ export default withRedux(configureStore)(withReduxSaga(NodeBird));
 ```
 
 ## SSR을 위해 쿠키 넣어주기
+* SSR은 pages에서만 해줘야 하기 때문에 기존에 AppLayout.js에 있던 dispatch 들을 우선 _app.js로 옮겨온 다음 SSR처리를 해보자.
+  - saga ajax호출시 쿠키관련 withCredentials 설정 내용이 SSR처리시에는 적용이 되지 않는다. 왜냐하면 frontend에서 browser에서 바로 호출하는게 아니고
+    frontend에서 frontend서버를 통해서 backend서버로 호출하기 때문이다.
+  - 그래서 쿠키설정 관련 내용을 SSR에 맞게 다시 코딩 해줘야 한다.
+```
+NodeBird.getInitialProps = async (context) => {
+  const { ctx, Component } = context;
+  let pageProps = {};
+  const state = ctx.store.getState();
+  const cookie = ctx.isServer ? ctx.req.headers.cookie : '';    // isServer일때는 cookie값을 가져와서
+  axios.defaults.headers.Cookie = '';
+  if (ctx.isServer && cookie) {
+    axios.defaults.headers.Cookie = cookie;     // 쿠키값을 직접 코딩으로 셋팅 해줘야 한다.
+    // axios.defaults.headers.Authorization = token; // 이런식으로 토큰넘기는 방식으로도 할 수 있다.
+  }
+  if (!state.user.me) { // user정보가 없을경우 user정보를 가져오는 saga ajax호출을 한다.
+    ctx.store.dispatch({
+      type: LOAD_USER_REQUEST,
+    });
+  }
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx) || {};
+  }
+  return { pageProps };
+};
+```
+
 * 서버사이드렌더링으로 바뀜에 따라서 문제가 발생한다.
   - client가 서버로 요청을 보낼때 withCredentials: true, 이런 부분에서 동작이 되지 않을 가능성이 있음.
   - client의 browser가 쿠키를 같이 동봉해서 보내므로 괜찮으나
@@ -162,5 +206,50 @@ export default withRedux(configureStore)(withReduxSaga(NodeBird));
   - client환경인지 서버환경인지 체크해서 서버환경일때만 넣어주는 로직으로 작성하는게 좋음.
   - ctx.isServer로 체크하여 분기를 한다.
 
+* pages/hashtag.js 의 useEffect의 dispatch를 옮겨본다.
+```
+Hashtag.getInitialProps = async (context) => {
+    const tag = context.query.tag;
+    console.log('hashtag getInitialProps', tag);
+    context.store.dispatch({
+        type: LOAD_HASHTAG_POSTS_REQUEST,
+        data: tag,
+    });
+    return { tag };
+};
+```
+* user.js도 옮겨준다.
+```
+User.getInitialProps = async (context) => {
+    const id = parseInt(context.query.id, 10);
+    console.log('user getInitialProps', id);
+    context.store.dispatch({
+        type: LOAD_USER_REQUEST,
+        data: id,
+    });
+    context.store.dispatch({
+        type: LOAD_USER_POSTS_REQUEST,
+        data: id,
+    });
+    return { id };
+};
+```
+
+## 리덕스 사가 액션 로깅하기
+* 액션이 실행되었는지 로그를 찍어본다. 사가 에러 찾기 위한 커스텀 미들웨어 적용 방법 알아두기.
+```
+const middlewares = [sagaMiddleware, (store) => (next) => (action) => {
+    console.log(action);
+    next(action);
+}]
+```
+
 ## SSR에서 내정보 처리하기
+* _app.js에 LOAD_USER_REQUEST 내정보를 가져오는 ajax를 날리고 profile화면에서 바로 내정보의 me를 가져와 쓰려고 하기때문에 문제가 생김.
+  - 아직 내정보의 success가 완료 되지 않았는데 me를 쓰려고 해서 문제가 생김.
+  - ajax시 id가 있으면 그 id로 호출하면 되고 없으면 기본값으로 처리해서 나의정보를 가져와라고 해야할것같다.
+* 게시글 삭제 기능 넣기
+  - PostCard.js 등 파일 수정.
+
+## 페이지네이션 적용
 * 

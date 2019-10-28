@@ -4,20 +4,10 @@ import { Menu, Input, Button, Row, Col, Card, Avatar } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
-import { LOAD_USER_REQUEST } from '../reducers/user';
 
 const AppLayout = ({children}) => {
     const { me } = useSelector(state => state.user);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (!me) {
-            dispatch({
-                type: LOAD_USER_REQUEST,
-            });
-        }
-    }, []);
-
+   
     return (
         <div>
             <Menu mode="horizontal">

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 import PropTypes from 'prop-types';
-import { signupRequestAction } from '../reducers/user';
+import { SIGN_UP_REQUEST } from '../reducers/user';
 import {useDispatch, useSelector} from 'react-redux';
 import Router from 'next/router';
 
@@ -46,11 +46,14 @@ const Signup = () => {
             return setTermError(true);
         }
 
-        dispatch(signupRequestAction({
-            userId: id,
-            password,
-            nickname: nick
-        }));
+        dispatch({
+            type: SIGN_UP_REQUEST,
+            data: {
+                userId: id,
+                password,
+                nickname: nick,
+            },
+        });
 
     }, [id, nick, password, passwordCheck, term]);
 
