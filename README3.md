@@ -122,9 +122,9 @@ NodeBird.getInitialProps = async (context) => {
 ## 해시태그 검색, 유저 정보 라우터 만들기
 * 
 
-# 서버사이드 렌더링
+# === 서버사이드 렌더링 ===
 ## 서버사이드 렌더링(SSR)
-* SPA 에서 검색엔진 노출을 위한 작업 필요.
+* SPA 에서 **검색엔진 노출**을 위한 작업 필요.
 * postman을 이용하여 체크
 * next를 쓰는 가장 큰 이유... 서버사이드 렌더링(getInitialProps: 메서드에서 데이터를 가져올 수 있다.)
 * 최초 화면 로딩할때 가져오는 useEffect에서 호출하는 dispatch하는 데이터를 모두 getInitialProps 쪽으로 옮겨온다.
