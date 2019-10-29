@@ -371,4 +371,20 @@ static getInitialProps(context) {
 ## 기타기능구현 Q&amp;A
 *
 ## 폴더구조와 _error.js
-* 정답은 없음 중복제거, 등등.
+* 폴더구조는 정답은 없음 중복제거, 등등.
+* _error.js처리
+  - context에 코드, status등 내용이 있어서 getInitialProps에서 처리한다.
+```
+const MyError = ({ statusCode }) => {
+  return (
+    <div>
+      <h1>{statusCode} 에러 발생</h1>
+    </div>
+  );
+};
+
+MyError.getInitialProps = async (context) => {
+  const statusCode = context.res ? context.res.statusCode : context.err ? context.err.statusCode : null;
+  return { statusCode };
+};
+```
