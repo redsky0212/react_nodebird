@@ -434,3 +434,20 @@ module.exports = withBundleAnalyzer({
   },
 });
 ```
+
+## next-bundle-analyzer
+* https://github.com/zeit/next.js/tree/canary/packages/next-bundle-analyzer
+  - 서비스 펙키지들의 분석이 필요하여 설치 위 코드부분은 버전이 달라져 좀 다름.
+  - build하고나면 분석된 html생성.
+  - 큰덩어리를 분리하는게 가능한기 검색필요. tree shaking
+  - 배포환경에서는 build를 하고 start를 할꺼기때문에 그 부분에 대한 설정.
+* cross-env설치 : window에서 package.json의 scripts의 환경변수 설정부분을 사용하기 위해.
+  - cross-env가 윈도우에서 환경변수를 사용할 수 있게 처리 해주는것. 
+```
+"scripts": {
+    "dev": "nodemon",
+    "build": "cross-env ANALYZE=true next build",
+    "prestart": "npm run build",
+    "start": "cross-env NODE_ENV=production PORT=80 pm2 start server.js"
+  },
+```
