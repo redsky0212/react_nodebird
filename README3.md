@@ -317,8 +317,9 @@ return produce(state, (draft) => {
 * 여러가지 복잡한 태그로 인해 검색엔진이 컨텐츠를 쉽게 체크하기위해 두가지 정도의 방법이 있다.
   - meta tag활용.
 
-## react-helmet으로 head태그 조작하기
+## react-helmet으로 head태그 조작하기(https://www.npmjs.com/package/react-helmet)
 * head에 meta tag를 활용하기 위해 helmet을 이용한다.
+* 현재 helmet의 title, description등을 태그형태로 적용하는 방법도 있는데 그것은 문제가 있음.
 ```
 <Helmet
     title={`${singlePost.User.nickname}님의 글`}
@@ -336,14 +337,38 @@ return produce(state, (draft) => {
     }]}
   />
 ```
+* frontend에 위와같이 넣어주고 SSR을 위해 또 처리해줘야 검색엔진이 알 수 있으므로 pages/_document.js파일을 생성하고 class문법으로 코딩한다.
+  - _document.js : next에서 html의 역할을 한다.
+  - _document.js를 사용할때는 기본적으로 사이트 태그 형태를 작성을 다 해줘야한다. html, head, body...
 
 ## react-helmet SSR
-*
-## styled-components
-*
+* _app.js쪽도 helmet으로 모두 대체한다.
+
+## styled-components (https://www.styled-components.com/docs/api)
+* const ImgWrapper = styled.div``; 이런식으로 컴포넌트를 생성한다음 스타일을 뒤에 넣어주고 사용하는부분에는 생성한 컴포넌트 이름을 넣어준다.
+* 스타일드컴포넌트를 모든 태그에 다 변수를 만들어서 적용 하기 보다는 상위태그를 변수로 정하고 하위태그는 그대로 사용하여 자식 css적용하는 기법으로 styled-components를 한다.
+  - https://www.styled-components.com/docs/api#supported-css
+
 ## styled-components SSR
-*
+* 스타일드컴포넌트도 SSR을 적용할 수 있다.
+```
+import { ServerStyleSheet } from 'styled-components';
+
+static getInitialProps(context) {
+  const sheet = new ServerStyleSheet();
+  const page = context.renderPage((App) => (props) => sheet.collectStyles(<App {...props} />));
+  const styleTags = sheet.getStyleElement();
+  return { ...page, helmet: Helmet.renderStatic(), styleTags };
+}
+```
+* 이렇게 코딩하고 사용하는 부분에 아래와 같이 head안에 추가코딩한다.
+```
+<head>
+  {this.props.styleTags}
+</head>
+```
+
 ## 기타기능구현 Q&amp;A
 *
 ## 폴더구조와 _error.js
-*
+* 정답은 없음 중복제거, 등등.
