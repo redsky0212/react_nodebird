@@ -253,3 +253,97 @@ const middlewares = [sagaMiddleware, (store) => (next) => (action) => {
 
 ## 페이지네이션 적용
 * 
+## 더보기 버튼
+* 
+## 인피니트 스크롤링
+* index.js에서 스크롤 관련 코딩시작
+  - window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight 세가지를 이용하여 체크한다.
+  - 스크롤을 내려서 끝에가기전 300쯤에서 데이터 불러오게 코딩한다.
+  - 게시글을 읽는 도중에 새로운 게시글이 추가 되는 경우를 대비해서 가져온 게시글의 최종게시글의 id를 이용하여 limit을 적용한다.
+```
+const onScroll = useCallback(() => {
+  if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
+    if (hasMorePost) {
+      const lastId = mainPosts[mainPosts.length - 1].id;
+      if (!countRef.current.includes(lastId)) {
+        dispatch({
+          type: LOAD_MAIN_POSTS_REQUEST,
+          lastId,
+        });
+        countRef.current.push(lastId);
+      }
+    }
+  }
+}, [hasMorePost, mainPosts.length]);
+```
+* lastId를 이용하여 게시글 가져오는 연관된 action, saga, sequelize부분들을 모두 코딩한다.
+* 최초 화면에 진입했을때는 게시글관련 state를 비워주고 더보기형태로 불러올때는 state의 리스트를 add한다.
+* 더 불러올 게시글이 있을때만 ajax호출하고 없으면 ajax호출 안돼게 막는다.
+
+## 쓰로틀링(throttling)
+* 스크롤을 순간적으로 내릴때 아니면 순간적으로 많은 ajax를 호출할때 막는 방법이 takeLatest 가 있는데 그것말고 다른 effect를 사용한다.
+  - takeLatest는 보내는 요청이 많은것은 어쩔수가 없고 마지막 요청만 유효하다고 체크해서 값을 가져오기때문에
+  - takeLatest 대신 throttle을 사용하여 제한시간을 설정할 수 있다. (https://redux-saga.js.org/docs/api/)
+  - 함수를 사용할때는 useCallback을 사용하여 꼭 캐싱해준다. (이것때문에 여러번 호출 될 수도있음.)
+
+
+## immer로 불변성 쉽게 쓰기( npm i immer )
+* import produce from 'immer';
+* switch문을 produce함수로 감싸고 draft.상태명 과 같은 방법으로 적용한다. (https://immerjs.github.io/immer/docs/introduction)
+* state대신에 draft를 사용하고 불변성 지키는 코드를 모두 지우고 바로 대입하는 방식으로 코딩하면 된다. 불변성은 immer가 해준다.
+```
+return produce(state, (draft) => {
+  switch (action.type) {
+    case UPLOAD_IMAGES_REQUEST: {
+        break;
+    }
+    case ADD_COMMENT_SUCCESS: {
+        const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+        draft.mainPosts[postIndex].Comments.push(action.data.comment);
+        draft.isAddingComment = false;
+        draft.commentAdded = true;
+        break;
+    }
+  }
+};
+```
+## 프론트단에서 리덕스 액션 호출 막기
+* 순간적으로 여러번 ajax호출하는것 제한하는 방법 
+  - frontend에서 막는 방법은 현재 보낸 ajax를 다시 보내지 않기 위해 보낸특정값을 변수로 저장하고 그 변수값이 있을경우에는 다시 보내지 않게 예외처리한다.
+  - saga의 throttle은 saga에서 막는거지 frontend에서 보내는것 자체는 막을수가 없음.
+
+## 개별 포스트 불러오기
+* 실제로 SSR 렌더링을 확인해보기 위해 각각의 게시글을 볼 수 있는 페이지가 필요하여 따로 페이지를 만듬.
+* 여러가지 복잡한 태그로 인해 검색엔진이 컨텐츠를 쉽게 체크하기위해 두가지 정도의 방법이 있다.
+  - meta tag활용.
+
+## react-helmet으로 head태그 조작하기
+* head에 meta tag를 활용하기 위해 helmet을 이용한다.
+```
+<Helmet
+    title={`${singlePost.User.nickname}님의 글`}
+    description={singlePost.content}
+    meta={[{
+      name: 'description', content: singlePost.content,
+    }, {
+      property: 'og:title', content: `${singlePost.User.nickname}님의 게시글`,
+    }, {
+      property: 'og:description', content: singlePost.content,
+    }, {
+      property: 'og:image', content: singlePost.Images[0] && `http://localhost:3065/${singlePost.Images[0].src}`,
+    }, {
+      property: 'og:url', content: `http://localhost:3060/post/${id}`,
+    }]}
+  />
+```
+
+## react-helmet SSR
+*
+## styled-components
+*
+## styled-components SSR
+*
+## 기타기능구현 Q&amp;A
+*
+## 폴더구조와 _error.js
+*
