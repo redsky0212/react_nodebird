@@ -388,3 +388,49 @@ MyError.getInitialProps = async (context) => {
   return { statusCode };
 };
 ```
+# ====== AWS에 배포 =====
+## favicon, prefetch 
+* 
+## next.config.js (https://nextjs.org/docs)
+* next의 기본 설정을 사용하여 프로젝트를 진행했으나 커스터 마이징이 필요할 경우 next.config.js을 이용하여 따로 설정한다.
+* 루트에 next.config.js 생성 후 작성
+```
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+const webpack = require('webpack');
+const CompressionPlugin = require('compression-webpack-plugin');
+
+module.exports = withBundleAnalyzer({
+  distDir: '.next',
+  webpack(config) {
+    const prod = process.env.NODE_ENV === 'production';
+    const plugins = [
+      ...config.plugins,
+      new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/),
+    ];
+    if (prod) {
+      plugins.push(new CompressionPlugin()); // main.js.gz
+    }
+    return {
+      ...config,
+      mode: prod ? 'production' : 'development',
+      devtool: prod ? 'hidden-source-map' : 'eval',
+      module: {
+        ...config.module,
+        rules: [
+          ...config.module.rules,
+          {
+            loader: 'webpack-ant-icon-loader',
+            enforce: 'pre',
+            include: [
+              require.resolve('@ant-design/icons/lib/dist'),
+            ],
+          },
+        ],
+      },
+      plugins,
+    };
+  },
+});
+```
