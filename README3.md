@@ -451,3 +451,13 @@ module.exports = withBundleAnalyzer({
     "start": "cross-env NODE_ENV=production PORT=80 pm2 start server.js"
   },
 ```
+
+## tree shaking 예제와 gzip
+* npm i moment, luxon, date-fns를 많이쓰니 사용해보기.
+  - moment : 날짜관련 라이브러리
+  - moment를 tree shaking해보기
+    - webpack설정에서 plugin: [...config.plugins, new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/)]
+* 설정하고 build하고 start하기. (prestart:"npm run build"를 sctipts를 설정해주면 npm run start해주면 그보다 앞서서 prestart를 해주고 start를 해주는 기능)
+  - build, start를 두번을 계속 안해도 prestart를 설정해두면 좋음.
+  - 참고로 poststart도 있음 (뒤에 실행하는것).
+* 
