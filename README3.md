@@ -460,4 +460,6 @@ module.exports = withBundleAnalyzer({
 * 설정하고 build하고 start하기. (prestart:"npm run build"를 sctipts를 설정해주면 npm run start해주면 그보다 앞서서 prestart를 해주고 start를 해주는 기능)
   - build, start를 두번을 계속 안해도 prestart를 설정해두면 좋음.
   - 참고로 poststart도 있음 (뒤에 실행하는것).
-* 
+* 무거운 js를 확인하기 위해 bundle-analyzer로 확인하고 tree shaking이 가능한지 확인하고 적용하는게 좋음.
+*  파일 용량을 줄이기 위해 gzip으로 만드는 방법도 있다. (npm i compression-webpack-plugin 설치하여 사용) 
+  - 배포할때 용량을 줄여 .gz 파일을 생성해준다. 보통 1/4정도 줄어든다.
