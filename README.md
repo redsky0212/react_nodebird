@@ -78,7 +78,7 @@ export defalut Home;
   - 상단 menu를 만들기 위해 ant design사이트에서 menu부분 코드를 가져다 쓴다.(https://ant.design/components/menu/)
   - index.js파일에서 AppLayout.js콤포넌트를 가져다 쓰면서 children으로 내용을 전달한다.
   - ant design이 적용 안되어있으므로 css를 head에 불러와 적용해줘야 한다.
-  - next에서는 head에 css를 불러와 쓸때 index.js에서 import Head from 'next/head' 해준다음
+  - next에서는 head에 css를 불러와 쓸때 index.js에서 **import Head from 'next/head'** 해준다음
   - jsx에서 head코딩을 한다.(https://nextjs.org/docs#populating-head)
 ```
 <Head>
